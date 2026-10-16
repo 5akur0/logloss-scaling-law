@@ -61,10 +61,10 @@ pdflatex scaling-proof.tex
 ## Citation
 
 ```bibtex
-@misc{scalingproof2026,
+@misc{logloss-scaling-law2026,
   title  = {Excess Log-Loss Scaling of Centered Normalized Networks:
             A Fixed-Depth Theorem in the Dimension-First Limit},
   year   = {2026},
-  howpublished = {\url{https://github.com/5akur0/scaling-proof}}
+  howpublished = {\url{https://github.com/5akur0/logloss-scaling-law}}
 }
 ```

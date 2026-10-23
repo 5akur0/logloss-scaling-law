@@ -53,6 +53,8 @@ pdflatex scaling-proof.tex
 
 ## Changelog
 
+- **2026-10-24 sixth working revision (Chinese)** — Describe geometric contraction steps using parent indices, remaining factors and stopping positions. Remove metaphorical descriptions while preserving the original hypotheses, displays and labels.
+
 - **2026-10-24 fifth working revision (Chinese)** — Smooth the complete regularized Fisher test field. This removes output smoothing, inverse-matrix differentiation and the comparison with a smoothed Fisher matrix. The lower bound now closes with one fixed regularization parameter, sent to zero after the dimension and sample-ratio limits. Specialize the information identity to the scalar prediction channel.
 
 - **2026-10-24 fourth working revision (Chinese)** — Replace the separate odd and piecewise-linear expansion arguments by one induction on source depth, preserving quadratic diagonal and one-remaining-factor cases. Define projections and slice Gram matrices at first use and replace ambiguous geometric terminology.

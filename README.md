@@ -53,6 +53,8 @@ pdflatex scaling-proof.tex
 
 ## Changelog
 
+- **2026-10-24 fourth working revision (Chinese)** — Replace the separate odd and piecewise-linear expansion arguments by one induction on source depth, preserving quadratic diagonal and one-remaining-factor cases. Define projections and slice Gram matrices at first use and replace ambiguous geometric terminology.
+
 - **2026-10-24 third working revision (Chinese)** — 31 to 29 pages: use actual-data mutual information for the spectral argument and remove the auxiliary infinite Gaussian sequence; reuse one Gaussian reference bound for the preliminary information estimate; combine repeated OU and tensor estimates. Rewrite the geometric and activation-expansion proofs with explicit indices and contractions, reducing invented terminology and removing diagnostic counterexamples.
 
 - **2026-10-24 second working revision (Chinese)** — 34 to 31 pages: unify the two predictive lower bounds with a parameter-OU test field; recover row matching and tensor coefficients from one square-difference identity; shorten the actual-activation recursion and remove unused tensor estimates. Bounded normalized odd activations automatically have a nonzero high-order Hermite coefficient, so the redundant radial-derivative condition and long tanh verification are removed.

@@ -3,7 +3,7 @@
 A self-contained proof of the fixed-depth excess log-loss (predictive KL) scaling law for
 Bayes-optimal learning in deep teacher–student networks.
 
-**Current proof (Chinese, 37 pages, 2026-10-23):** [`scaling-proof-zh.pdf`](scaling-proof-zh.pdf) · [`scaling-proof-zh.tex`](scaling-proof-zh.tex)
+**Current proof (Chinese, 34 pages, 2026-10-24):** [`scaling-proof-zh.pdf`](scaling-proof-zh.pdf) · [`scaling-proof-zh.tex`](scaling-proof-zh.tex)
 
 **Earlier English edition (v1.1):** [`scaling-proof.pdf`](scaling-proof.pdf) · [`scaling-proof.tex`](scaling-proof.tex)
 
@@ -32,7 +32,8 @@ risk limit at fixed $\alpha$, nor local Gaussianity of the posterior.
 - A coupling-uniform global function comparison and finite-label parameter matching.
 - An auxiliary Gaussian sequence channel turns global matching into the qualitative Fisher spectral property needed for the lower bound.
 - Conditional I–MMSE and Gaussian integration by parts give the predictive lower bound with its exact factor 1/2.
-- A noisy parameter observation, a ridge predictor, and an exact sample-block information identity give the sharp upper bound.
+- Consistent linear Gaussian reference distributions, relative-entropy monotonicity, and a sample-block information identity give the sharp upper bound.
+- Direct OU gradient estimates and parameter-semigroup smoothing cover the piecewise-linear branch. Unified residual-tensor bounds handle the geometric contractions.
 - All supporting estimates remain in the standalone document. The theorem, activation class and dimension-first limit are unchanged from the preceding Chinese working version.
 
 ## Build
@@ -51,6 +52,8 @@ pdflatex scaling-proof.tex
 ```
 
 ## Changelog
+
+- **2026-10-24 working revision (Chinese)** — 37 to 34 pages: replace the ridge upper-bound construction by a consistent Gaussian-reference argument; replace activation smoothing by parameter OU smoothing; consolidate residual-tensor contractions and remove redundant terminal sign constraints. The theorem and activation class are unchanged.
 
 - **2026-10-23 working revision (Chinese)** — 44 to 37 pages: replace the separate tangent-bridge argument with an information-theoretic consequence of global matching, and replace the mixture-channel lower bound with conditional I–MMSE and Gaussian integration by parts. The English edition has not yet been updated to this argument.
 

@@ -3,7 +3,7 @@
 A self-contained proof of the fixed-depth excess log-loss (predictive KL) scaling law for
 Bayes-optimal learning in deep teacher–student networks.
 
-**Current proof (Chinese, 31 pages, 2026-10-24):** [`scaling-proof-zh.pdf`](scaling-proof-zh.pdf) · [`scaling-proof-zh.tex`](scaling-proof-zh.tex)
+**Current proof (Chinese, 29 pages, 2026-10-24):** [`scaling-proof-zh.pdf`](scaling-proof-zh.pdf) · [`scaling-proof-zh.tex`](scaling-proof-zh.tex)
 
 **Earlier English edition (v1.1):** [`scaling-proof.pdf`](scaling-proof.pdf) · [`scaling-proof.tex`](scaling-proof.tex)
 
@@ -30,10 +30,10 @@ risk limit at fixed $\alpha$, nor local Gaussianity of the posterior.
 ## Current proof structure
 
 - A coupling-uniform global function comparison and finite-label parameter matching.
-- An auxiliary Gaussian sequence channel turns global matching into the qualitative Fisher spectral property needed for the lower bound.
+- Bounds on the mutual information of the actual training data turn posterior parameter contraction into the qualitative Fisher spectral property needed for the lower bound.
 - Conditional I–MMSE and Gaussian integration by parts give the predictive lower bound with its exact factor 1/2.
 - Consistent linear Gaussian reference distributions, relative-entropy monotonicity, and a sample-block information identity give the sharp upper bound.
-- Direct OU gradient estimates and parameter-semigroup smoothing cover the piecewise-linear branch. Unified residual-tensor bounds handle the geometric contractions.
+- A shared weighted sign-change estimate controls OU gradient differences, and one Hermite calculation gives both the linearization remainder and parameter smoothing. Tensor contractions are stated directly in terms of indices, matrix norms, and conditional expectations.
 - All supporting estimates remain in the standalone document. The scaling theorem and dimension-first limit are unchanged; the redundant radial Hermite-derivative condition has been removed without excluding any previously covered activation.
 
 ## Build
@@ -52,6 +52,8 @@ pdflatex scaling-proof.tex
 ```
 
 ## Changelog
+
+- **2026-10-24 third working revision (Chinese)** — 31 to 29 pages: use actual-data mutual information for the spectral argument and remove the auxiliary infinite Gaussian sequence; reuse one Gaussian reference bound for the preliminary information estimate; combine repeated OU and tensor estimates. Rewrite the geometric and activation-expansion proofs with explicit indices and contractions, reducing invented terminology and removing diagnostic counterexamples.
 
 - **2026-10-24 second working revision (Chinese)** — 34 to 31 pages: unify the two predictive lower bounds with a parameter-OU test field; recover row matching and tensor coefficients from one square-difference identity; shorten the actual-activation recursion and remove unused tensor estimates. Bounded normalized odd activations automatically have a nonzero high-order Hermite coefficient, so the redundant radial-derivative condition and long tanh verification are removed.
 

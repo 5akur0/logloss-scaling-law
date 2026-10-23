@@ -22,7 +22,6 @@
 \newcommand{\I}{\mathcal I}
 \newcommand{\Pall}{P_{\mathrm{hidden}}}
 \newcommand{\Pout}{P_{\mathrm{out}}}
-\newcommand{\dsm}{\delta_{\mathrm{sm}}}
 \newcommand{\ecut}{\eta_{\mathrm{cut}}}
 \newcommand{\norm}[1]{\left\|#1\right\|}
 \DeclareMathOperator{\tr}{tr}
@@ -83,7 +82,7 @@ p_{\mathcal D_n}(y\mid x)
 \,\middle\|\,p_{\mathcal D_n}(\cdot\mid x)\right).
 \end{aligned}\end{equation}
 写 $\epsilon_{\log,d}(\alpha):=\epsilon_{\log,d,\lfloor\alpha d^2\rfloor}$。
-技术证明中简记 $p=\Pall(d)$，并把 $W$ 视为 $p$ 维隐藏权重坐标；梯度、Hessian、高斯积分和 OU 耦合均只作用于这些坐标。写 $\theta'=\theta(V)$ 表示第二组权重对应的参数。先验平均中可将真实隐藏权重 $W^0$ 简记为 $W$；技术附录中的 $F_W=F_{\theta(W)}^{(L)}$ 与 $F=F_W$ 均指同一个实际输出，除非另行明确指定齐次比较器。
+技术证明中简记 $p=\Pall(d)$，并把 $W$ 视为 $p$ 维隐藏权重坐标；梯度、Hessian、高斯积分和 OU 耦合均只作用于这些坐标。写 $\theta'=\theta(V)$ 表示第二组权重对应的参数。先验平均中可将真实隐藏权重 $W^0$ 简记为 $W$；技术附录中的 $F_W=F_{\theta(W)}^{(L)}$ 与 $F=F_W$ 均指同一个实际输出，除非明确使用下文定义的齐次多项式网络。
 
 所有常数允许依赖固定深度、激活、宽度比例与噪声，不能依赖 $d,n$。
 
@@ -121,7 +120,7 @@ $m$ 可依赖固定激活，但不随维数或样本数变化；后文常数允�
 \end{equation}
 该结论包含任意固定正斜率的中心化归一化 tanh、logistic sigmoid，以及中心化归一化 ReLU。
 \end{theorem}
-先取 $d\to\infty$，再取 $\alpha\to\infty$。不要求固定 $\alpha$ 的风险极限存在；不据此扩展到未中心化模型、层间任意混用两支、增长深度或非高斯输出的尖锐上界。
+先取 $d\to\infty$，再取 $\alpha\to\infty$。不要求固定 $\alpha$ 的风险极限存在；不据此扩展到未中心化模型、层间任意混用两支、增长深度或非高斯输出下同一精确常数的上界。
 
 \section{三个激活为何属于此类}
 \newthought*{只需验证上述标量函数性质。}
@@ -175,15 +174,14 @@ $\sqrt{k_L}\,\mathbb E[\sigma(\sqrt{q_{L-1}}G)]$。
 梯度矩及光滑支的 $\mathbb E\|\nabla_W^2F\|_{\rm HS}^2\le C$
 由引理 \ref{an:derivatives} 的前向、反向递推与 Hessian 分解给出。
 
-两支统一取参数 OU 平滑
-$F_{\dsm}(W,X)=\mathbb E_ZF(e^{-\dsm^2}W+\sqrt{1-e^{-2\dsm^2}}Z,X)$。
-引理 \ref{an:smoothing} 证明
-\begin{equation}\label{eq:smoothing}\begin{aligned}
-\E\norm{\nabla F_{\dsm}-\nabla F}^2&\le C\dsm,\\
-\E\norm{\nabla^2F_{\dsm}}_{\rm HS}^2&\le C/\dsm,\qquad
-\E\norm{\nabla F_{\dsm}}^4\le C.
-\end{aligned}\end{equation}
-该平滑仅构造统计测试场，真实网络与似然不变。
+令 $a(W,X)=\nabla_WF_{\theta(W)}^{(L)}(X)$。引理 \ref{an:ou} 给出两支共用的
+梯度变化估计：对独立标准高斯 $Z$ 和 $0<\tau\le1$，
+\begin{equation}\label{eq:gradient-stability}
+ W_\tau=e^{-\tau}W+\sqrt{1-e^{-2\tau}}Z,\qquad
+ \E\|a(W_\tau,X)-a(W,X)\|^2\le C\sqrt\tau.
+\end{equation}
+
+
 
 记 $\theta(t)=\theta(W(t))$。令 $W(t)=\sqrt{1-t}W+\sqrt tZ$ 为保持先验的 OU 耦合。高斯 Hermite 展开给出
 \begin{equation}\label{eq:ou-rem}\begin{aligned}
@@ -482,20 +480,22 @@ $r\downarrow0$、$s\downarrow0$，得到
 \end{equation}
 
 \subsection{预测 KL 下界}
-附录 \ref{app:information} 对两支使用同一 OU 平滑测试场，证明
+附录 \ref{app:information} 对正则化测试场作 OU 平滑，证明
 \begin{equation}\label{eq:lower-unified}
 \epsilon_{\log,d,n}\ge
-\frac{p[1-D_d(r)-C\sqrt{\dsm/r}]_+^2}
-{2\{n(1+C\sqrt{\dsm/r})^2+Cp/(r^2\dsm)\}},
-\qquad 0<r,\dsm\le1.
+\frac{p[1-D_d(r)-C\sqrt r]_+^2}
+{2\{n(1+C\sqrt r)^2+Cp/r^5\}},\qquad 0<r\le1.
 \end{equation}
-取 $r=\alpha^{-1/8}$、$\dsm=\alpha^{-1/2}$。则
-$\sqrt{\dsm/r}=\alpha^{-3/16}$、
-$(\alpha r^2\dsm)^{-1}=\alpha^{-1/4}$；先令 $d\to\infty$，
-再由 \eqref{eq:deficit} 令 $\alpha\to\infty$，得到
+固定 $r$，依次令 $d\to\infty$、$\alpha\to\infty$，得到
+\[
+ \liminf_{\alpha\to\infty}\alpha\liminf_d\epsilon_{\log,d}(\alpha)
+ \ge \frac{c[1-D_*(r)-C\sqrt r]_+^2}{2(1+C\sqrt r)^2}.
+\]
+最后由 \eqref{eq:deficit} 令 $r\downarrow0$，得到
 \begin{equation}\label{eq:lower-final}
 \liminf_{\alpha\to\infty}\alpha\liminf_d\epsilon_{\log,d}(\alpha)\ge c/2.
 \end{equation}
+
 \section{消去辅助观测并完成上界}
 定义 $J_j(t)=I(W;V_t\mid\mathcal D_j)$。给定数据独立抽后验样本 $W'$，
 用有限匹配族构造参考密度
@@ -564,7 +564,7 @@ $\vartheta^{-1}\log(1/(1-\vartheta))\to1$ 得
  h^{(\ell)}=\sigma_\ell(u^{(\ell)}),\quad h^{(0)}=X,\qquad
  F=k_L^{-1/2}\boldsymbol1^Th^{(L)}.
 \]
-每层激活固定、全局 Lipschitz，且 $\mathbb E\sigma_\ell(G)=0$、$\mathbb E\sigma_\ell(G)^2=1$。常数可以依赖 $L,c,C$、激活以及指定的有限阶矩，不能依赖 $d$。后文的平滑常数还独立于 $0<\dsm\le1$；维数阈值也独立于该区间内的 $\dsm$。任何矩阶均先固定，再选择维数阈值。
+每层激活固定、全局 Lipschitz，且 $\mathbb E\sigma_\ell(G)=0$、$\mathbb E\sigma_\ell(G)^2=1$。常数可以依赖 $L,c,C$、激活以及指定的有限阶矩，不能依赖 $d$。后文 OU 梯度变化与余项估计的常数和维数阈值均独立于其扰动参数。任何矩阶均先固定，再选择维数阈值。
 
 \subsection{输出和隐藏范数的任意固定阶矩}
 \begin{lemma}\label{an:moments}
@@ -784,58 +784,39 @@ $\E[P(\|\beta'_\ell-\beta_\ell\|^2+\|\lambda'_\ell-\lambda_\ell\|^2)]\le C_P\sqr
 最后用梯度块公式~\eqref{an:gradient} 作乘积差展开，结合前向差界即可。
 \end{proof}
 
-\subsection{OU 余项与参数平滑}
-\begin{lemma}\label{an:ou}\label{an:smoothing}
-令 $\delta=1$（光滑支）或 $\delta=1/2$（分段线性支）。对 $0<t\le1/2$，
+\subsection{OU 梯度变化与余项}
+\begin{lemma}\label{an:ou}
+令 $\delta=1$（光滑支）或 $\delta=1/2$（分段线性支）。
+对 $W(t)=\sqrt{1-t}W+\sqrt tZ$、$0<t\le1/2$，有
 \[
- R_t=F(\sqrt{1-t}W+\sqrt tZ,X)-F(W,X)-\sqrt t\,DF(W,X)[Z]
- \quad\text{满足}\quad \E|R_t|^2\le Ct^{1+\delta}.
+ G(t):=\E\|\nabla F(W(t),X)-\nabla F(W,X)\|^2\le Ct^\delta,
 \]
-置 $F_{\dsm}=\mathsf P_{\dsm^2}F$，其中
-$\mathsf P_sF(W,X)=\E_ZF(e^{-s}W+\sqrt{1-e^{-2s}}Z,X)$。
-对 $0<\dsm\le1$ 有
 \[
- \E\|\nabla F_{\dsm}-\nabla F\|^2\le C\dsm^{2\delta},\qquad
- \E\|\nabla^2F_{\dsm}\|_{\rm HS}^2\le C\dsm^{2\delta-2},\qquad
- \E\|\nabla F_{\dsm}\|^4\le C.
+ R_t=F(W(t),X)-F(W,X)-\sqrt t\,DF(W,X)[Z],\qquad
+ \E|R_t|^2\le Ct^{1+\delta}.
 \]
-两支因此均满足式~\eqref{eq:smoothing}，且常数和维数阈值不依赖 $t,\dsm$。
+常数和维数阈值不依赖 $t$。
 \end{lemma}
 \begin{proof}
 记 $c_N$ 为对 $X$ 平均后的第 $N$ 阶参数 Hermite 能量，$a_t=\sqrt{1-t}$。
-正交性和 $\partial_iH_\nu=\sqrt{\nu_i}H_{\nu-e_i}$ 给出
+正交性和 $\partial_iH_\nu=\sqrt{\nu_i}H_{\nu-e_i}$ 给
 \[
- G(t):=\E\|\nabla F(W(t)) -\nabla F(W)\|^2
- =2\sum_{N\ge1}N(1-a_t^{N-1})c_N\le Ct^\delta.
+ G(t)=2\sum_{N\ge1}N(1-a_t^{N-1})c_N\le Ct^\delta.
 \]
-光滑支的最后一步用 $1-a_t^{N-1}\le Ct(N-1)$ 及
+光滑支用 $1-a_t^{N-1}\le Ct(N-1)$ 及
 $\sum_NN(N-1)c_N=\E\|\nabla^2F\|_{\rm HS}^2\le C$；
-分段线性支用引理~\ref{an:gradient-ou}。
+分段线性支用引理 \ref{an:gradient-ou}。
+取 $t=1-e^{-2\tau}$ 即得 \eqref{eq:gradient-stability}；
+$t>1/2$ 时由梯度二阶矩增大常数即可。
 同一正交展开（交叉项对 $Z$ 分部积分）给
 \[
  \E|R_t|^2=\sum_{N\ge1}\{2(1-a_t^N)+tN-2tNa_t^{N-1}\}c_N.
 \]
-当 $N\ge2$ 时，$a_t^N\ge1-Nt/2$；当 $N=1$ 时，大括号等于 $(1-a_t)^2\le t^2$。
-因此完整余项满足
+当 $N\ge2$ 时 $a_t^N\ge1-Nt/2$；当 $N=1$ 时大括号等于
+$(1-a_t)^2\le t^2$。因此
 \begin{equation}\label{an:hermite}
  \E|R_t|^2\le t^2\E\|\nabla F\|^2+tG(t)\le Ct^{1+\delta}.
 \end{equation}
-
-令 $s=\dsm^2$。由上述梯度恒等式，
-$B(s):=\sum_{N\ge1}N(1-e^{-s(N-1)})c_N\le Cs^\delta$。
-这里在 $1-e^{-2s}\le1/2$ 时取 $t=1-e^{-2s}$，其余 $s\le1$ 用梯度矩界。
-OU 半群逐阶乘 $e^{-sN}$，于是
-\[
- \begin{aligned}
- \E\|\nabla\mathsf P_sF-\nabla F\|^2
- &=\sum_{N\ge1}N(1-e^{-sN})^2c_N\le C s^2\sum_NNc_N+CB(s),\\
- \E\|\nabla^2\mathsf P_sF\|_{\rm HS}^2
- &=\sum_{N\ge2}N(N-1)e^{-2sN}c_N\le Cs^{-1}B(s).
- \end{aligned}
-\]
-两行分别使用 $1-e^{-sN}\le s+1-e^{-s(N-1)}$ 和
-$xe^{-2x}\le C(1-e^{-x})$。最后由
-$\nabla\mathsf P_sF=e^{-s}\mathsf P_s\nabla F$、Jensen 及先验不变性得到梯度四阶矩界。
 计算先对有限 Hermite 和成立，再在高斯 Sobolev 范数下取极限。
 \end{proof}
 
@@ -1608,7 +1589,7 @@ $\sup_d\mathbb E\|B(W)\|_2^2<\infty$，则
  \sup_i\sum_a\left|\prod_{j=1}^m\rho^{(j)}_{ia}\right|
  +\sup_a\sum_i\left|\prod_{j=1}^m\rho^{(j)}_{ia}\right|\le K_d.
 \end{equation}
-故所得矩阵 $M$ 的绝对行列和有界。下一教师原始 高斯 矩阵 $A$ 满足
+故所得矩阵 $M$ 的绝对行列和有界。下一教师原始高斯矩阵 $A$ 满足
 $\max|A_{ij}|\le\kappa_d$，从而 $\max|AM|\le K_d\kappa_d$，
 即使 $M$ 依赖两个网络也成立。
 
@@ -1693,7 +1674,7 @@ $\max|A_{ij}|\le\kappa_d$，从而 $\max|AM|\le K_d\kappa_d$，
 不能容纳一个 $m\ge5$ 因子的教师叶，已属于访问其他列的情形。
 若另一个是原孩子，则所有较高层已完成输出及未收缩子树仍分别保留索引，
 且原子树次数为正；上方仅一个索引因此迫使当前节点以上只有原始一元链。
-其系数 $d$ 是归一化读出乘原 高斯 连续积，故
+其系数 $d$ 是归一化读出乘原高斯连续积，故
 $\|d\|_2\le K_d$、$\|d\|_\infty\le\kappa_d$。展开唯一原孩子的第一条边得到
 \[
  \sum_a d_a\ell_a\otimes\Bigl(\sum_bU_{ab}Q_b\Bigr)
@@ -2014,29 +1995,27 @@ $\|r_ia_i-t_ib_i\|^2\le C\|a_i-b_i\|^2+C\delta_d^2$
 
 \section{条件 I--MMSE 与统一平滑测试场}\label{app:information}
 \begin{lemma}[条件 I--MMSE]\label{info:immse}
-设 $S\in\mathbb R^M$ 有有限二阶矩，$N\sim N(0,I_M)$ 独立于 $(S,Z)$。
+设实随机变量 $S$ 有有限二阶矩，$N\sim N(0,1)$ 独立于 $(S,Z)$。
 对 $Y_s=\sqrt sS+N$，有
 \[
  I(S;Y_\rho\mid Z)=\frac12\int_0^\rho
- \mathbb E\|S-\mathbb E[S\mid Z,Y_s]\|^2\,ds.
+ \E[(S-\E[S\mid Z,Y_s])^2]\,ds.
 \]
 \end{lemma}
 \begin{proof}
-条件于 $Z=z$，令 $q_v$ 为 $S+\sqrt vN$ 的密度。
-高斯热方程及分部积分给
+条件于 $Z=z$，令 $q_v$ 为 $S+\sqrt vN$ 的密度。高斯热方程和分部积分给
 \[
  \frac d{dv}h(q_v)=\frac12\mathcal J(q_v),\qquad
- \nabla\log q_v(y)=\frac{\mathbb E[S\mid z,S+\sqrt vN=y]-y}{v}.
+ \partial_y\log q_v(y)=\frac{\E[S\mid z,S+\sqrt vN=y]-y}{v}.
 \]
 将 $S-(S+\sqrt vN)$ 对观察作正交分解，得到
-$\operatorname{mmse}(S\mid z,S+\sqrt vN)=Mv-v^2\mathcal J(q_v)$。
-从 $h(q_v)$ 减去噪声熵 $(M/2)\log(2\pi ev)$ 后微分，
-再换元 $v=1/s$，即得互信息导数为 MMSE 的一半。
-对有界信号可先在有界空间积分，再去掉空间截断；
-一般信号用二阶矩截断逼近。高斯卷积满足 $\mathcal J(q_v)\le M/v$，
-截断信号的二阶矩一致可积，故每个紧区间 $0<s_0\le s\le s_1$ 上的积分恒等式通过极限。
-最后用 $0\le I(S;Y_s\mid Z)\le s\mathbb E\|S\|^2/2$
-及 $\operatorname{mmse}\le\mathbb E\|S\|^2$，平均 $z$ 并令 $s_0\downarrow0$。
+$\operatorname{mmse}(S\mid z,S+\sqrt vN)=v-v^2\mathcal J(q_v)$。
+从熵中减去噪声熵 $\tfrac12\log(2\pi ev)$ 后微分，再换元 $v=1/s$，
+互信息导数即为 MMSE 的一半。有界信号先在有界空间积分，再去掉空间截断；
+一般信号以二阶矩截断逼近。由 $\mathcal J(q_v)\le1/v$ 及截断二阶矩的一致可积性，
+每个紧区间 $0<s_0\le s\le s_1$ 上的积分恒等式通过极限。
+最后用 $I(S;Y_s\mid Z)\le s\E S^2/2$、$\operatorname{mmse}\le\E S^2$，
+平均 $z$ 并令 $s_0\downarrow0$。
 \end{proof}
 
 \subsection{真实通道的分部积分界}
@@ -2064,78 +2043,73 @@ $n\mathcal I_W$。因此 Cauchy--Schwarz 给
 先对紧支撑光滑场及截断的后验均值证明，再用引理 \ref{an:sobolev}
 的 Sobolev 逼近和 $L^2$ 收敛取极限；以下估计保证所需可积性。
 
-\subsection{两支共用的正则化场及其导数}
-固定 $0<r,\dsm\le1$，令 $a_{\dsm}=\nabla_WF_{\dsm}(W,X)$、
-$\mathcal I_{\dsm}=\E_Xa_{\dsm}a_{\dsm}^T/\Delta$、
-$\lambda=r/p$、$M=(\mathcal I_{\dsm}+\lambda I)^{-1}$、$b=Ma_{\dsm}$。
-仅测试场被平滑，$f$、$U_s$ 和训练似然均仍为真实网络。
-定义算子 $T,T_{\dsm}:\mathbb R^p\to L^2(P_X)$：
-$(Tu)(X)=a(X)^Tu/\sqrt\Delta$，$T_{\dsm}$ 同理。
-于是 $T^*T=\mathcal I_W$、$T_{\dsm}^*T_{\dsm}=\mathcal I_{\dsm}$。
-
-为控制逆矩阵导数，记 $C_i=M^{1/2}(\partial_i\mathcal I_{\dsm})M^{1/2}$。
-由 $\|T_{\dsm}M^{1/2}\|_{\rm op}\le1$，有
+\subsection{正则化测试场的 OU 平滑}
+固定 $0<\tau\le r\le1$，令 $\lambda=r/p$、
+$M_W=(\mathcal I_W+\lambda I_p)^{-1}$、$b_0(W,X)=M_Wa(W,X)$。
+取 \eqref{eq:gradient-stability} 中的 $W_\tau$，仅对参数作条件平均：
 \[
- C_i=(\partial_iT_{\dsm}M^{1/2})^*T_{\dsm}M^{1/2}
-       +(T_{\dsm}M^{1/2})^*\partial_iT_{\dsm}M^{1/2},\qquad
- \|C_i\|_{\rm HS}^2\le4\|M\|_{\rm op}\|\partial_iT_{\dsm}\|_{\rm HS}^2.
+ b_\tau(W,X)=\E[b_0(W_\tau,X)\mid W,X].
 \]
-保留 $\partial_iM=-M(\partial_i\mathcal I_{\dsm})M$，并用
+真实网络、训练似然及辅助观测 $U_s$ 均不变。首先
 \[
- \E_X\|M(\partial_i\mathcal I_{\dsm})Ma_{\dsm}\|^2
- \le\Delta\|M\|_{\rm op}\|C_i\|_{\rm HS}^2,
+ \E\|b_0\|^2=\Delta\E\tr(M_W^2\mathcal I_W)
+ \le\frac{\Delta p}{4\lambda},\qquad
+ \E\|b_\tau\|^4\le\E\|b_0\|^4\le C\lambda^{-4}.
 \]
-对 $i$ 求和，得到
+将 $b_0$ 视为 $L^2(P_X;\mathbb R^p)$ 值函数，记第 $k$ 阶参数 Hermite
+能量为 $c_k$。OU 半群逐阶乘 $e^{-\tau k}$，所以
 \[
- \E\|Db\|_{\rm HS}^2
- \le C\lambda^{-2}\E\|\nabla_W^2F_{\dsm}\|_{\rm HS}^2
- \le Cp^2/(r^2\dsm).
+ \E\|Db_\tau\|_{\rm HS}^2
+ =\sum_{k\ge1}ke^{-2\tau k}c_k
+ \le C\tau^{-1}\E\|b_0\|^2\le Cp^2/(r\tau).
 \]
-又 $\E\|b\|^2=\Delta\E\tr(M^2\mathcal I_{\dsm})\le\Delta p/(4\lambda)$。
-引理 \ref{an:sobolev} 及梯度四阶矩遂给
+这直接使 $b_\tau$ 属于高斯 $W^{1,2}$，不需要对 $M_W$ 求导。
+由引理 \ref{an:sobolev}、梯度四阶矩及 $\tau\le r$，
 \begin{equation}\label{unified:field-cost}
- \E(\delta b)^2\le Cp^2/(r^2\dsm),\qquad
- \E(b^Ta)^2\le\lambda^{-2}\E(\|a_{\dsm}\|^2\|a\|^2)\le Cp^2/r^2.
+ \E(\delta b_\tau)^2\le Cp^2/(r\tau),\qquad
+ \E(b_\tau^Ta)^2\le
+ (\E\|b_\tau\|^4\E\|a\|^4)^{1/2}
+ \le Cp^2/r^2\le Cp^2/(r\tau).
 \end{equation}
 
-\subsection{比较真实与平滑信息矩阵}
-记 $E=T-T_{\dsm}$，则 \eqref{eq:smoothing} 给
-$\E\|E\|_{\rm HS}^2\le C\dsm$。令
-$M_0=(\mathcal I_W+\lambda I)^{-1}$、
-$D_{d,\dsm}(r)=(\lambda/p)\E\tr M$。
-因为
+由高斯先验不变性、\eqref{eq:gradient-stability} 和 Cauchy--Schwarz，
+\begin{equation}\label{field:target}\begin{aligned}
+ \E b_\tau^Ta(W,X)
+ &=\E b_0(W_\tau,X)^Ta(W,X)\\
+ &\ge\Delta p[1-D_d(r)]
+   -(\E\|b_0\|^2)^{1/2}
+       (\E\|a(W_\tau,X)-a(W,X)\|^2)^{1/2}\\
+ &\ge\Delta p[1-D_d(r)-C(\tau/r^2)^{1/4}].
+\end{aligned}\end{equation}
+
+为控制训练得分项，另取独立输入 $\overline X$。条件 Jensen 给
 \[
- M-M_0=M(T_{\dsm}^*E+E^*T)M_0,
-\quad
- \|T_{\dsm}M\|_{\rm HS},\ \|TM_0\|_{\rm HS}
- \le\sqrt{p/(4\lambda)},\quad
- \|M\|_{\rm op},\ \|M_0\|_{\rm op}\le1/\lambda,
+ \E b_\tau^T\mathcal I_Wb_\tau
+ \le\Delta^{-1}\E[(b_0(W_\tau,X)^Ta(W,\overline X))^2].
 \]
-对两个乘积逐项取迹并用 Hilbert--Schmidt Cauchy--Schwarz，得到
+写 $M'=M_{W_\tau}$、$\mathcal I'=\mathcal I_{W_\tau}$。
+条件于 $(W,W_\tau,\overline X)$，$X$ 仍独立，故
 \[
- |D_{d,\dsm}(r)-D_d(r)|
- \le\frac{\E\|E\|_{\rm HS}}{\sqrt{p\lambda}}
- \le C\sqrt{\dsm/r}.
+ \E_X b_0(W_\tau,X)b_0(W_\tau,X)^T
+ =\Delta M'\mathcal I'M'\preceq\frac{\Delta}{4\lambda}I_p.
 \]
-同样由 $\E b^Ta=\Delta\E\tr(MT_{\dsm}^*T)$，有
+在内积中分解 $a(W,\overline X)=a(W_\tau,\overline X)+e$。
+第一项的平方平均除以 $\Delta$ 为
+$\Delta\E\tr[(M'\mathcal I')^2]\le\Delta p$；第二项满足
 \[
- \E b^Ta\ge\Delta p[1-D_{d,\dsm}(r)]
-       -\Delta\sqrt{p/(4\lambda)}(\E\|E\|_{\rm HS}^2)^{1/2}
- \ge\Delta p[1-D_d(r)-C\sqrt{\dsm/r}].
+ \Delta^{-1}\E[(b_0(W_\tau,X)^Te)^2]
+ \le\frac1{4\lambda}\E\|e\|^2\le C\sqrt\tau/\lambda.
 \]
-最后在 $L^2(W)$ 中使用算子 Hilbert--Schmidt 范数的三角不等式。
-由 $\|T_{\dsm}MT_{\dsm}^*\|_{\rm HS}^2\le p$ 及
-$\|EMT_{\dsm}^*\|_{\rm HS}^2\le\|E\|_{\rm HS}^2/(4\lambda)$，得到
-\[
- (\E b^T\mathcal I_Wb/\Delta)^{1/2}
- =(\E\|TMT_{\dsm}^*\|_{\rm HS}^2)^{1/2}
- \le\sqrt p+C\sqrt{\dsm/\lambda}
- =\sqrt p(1+C\sqrt{\dsm/r}).
-\]
-将目标取正部，把上述估计及 \eqref{unified:field-cost} 代入
-\eqref{eq:vt-mmse}，再对 \eqref{eq:conditional-immse} 积分，即得
-\eqref{eq:lower-unified}。精确系数 $1/2$ 来自真实通道的条件 I--MMSE，
-而不是后验高斯近似。
+由 $L^2$ 三角不等式，得到
+\begin{equation}\label{field:training}
+ \E b_\tau^T\mathcal I_Wb_\tau
+ \le\Delta p[1+C(\tau/r^2)^{1/4}]^2.
+\end{equation}
+将 \eqref{field:target} 的右侧取正部，把
+\eqref{unified:field-cost}、\eqref{field:training} 代入
+\eqref{eq:vt-mmse}，再对 \eqref{eq:conditional-immse} 积分。
+最后取 $\tau=r^4$，使 $(\tau/r^2)^{1/4}=\sqrt r$、$r\tau=r^5$，
+即得 \eqref{eq:lower-unified}。
 
 \end{fullwidth}
 \end{document}

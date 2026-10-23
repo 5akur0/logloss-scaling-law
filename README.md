@@ -33,7 +33,7 @@ risk limit at fixed $\alpha$, nor local Gaussianity of the posterior.
 - Bounds on the mutual information of the actual training data turn posterior parameter contraction into the qualitative Fisher spectral property needed for the lower bound.
 - Conditional I–MMSE and Gaussian integration by parts give the predictive lower bound with its exact factor 1/2.
 - Consistent linear Gaussian reference distributions, relative-entropy monotonicity, and a sample-block information identity give the sharp upper bound.
-- A shared weighted sign-change estimate controls OU gradient differences, and one Hermite calculation gives both the linearization remainder and parameter smoothing. Tensor contractions are stated directly in terms of indices, matrix norms, and conditional expectations.
+- A shared weighted sign-change estimate controls OU gradient differences, and a Hermite calculation gives the linearization remainder. Tensor contractions are stated directly in terms of indices, matrix norms, and conditional expectations.
 - All supporting estimates remain in the standalone document. The scaling theorem and dimension-first limit are unchanged; the redundant radial Hermite-derivative condition has been removed without excluding any previously covered activation.
 
 ## Build
@@ -52,6 +52,8 @@ pdflatex scaling-proof.tex
 ```
 
 ## Changelog
+
+- **2026-10-24 fifth working revision (Chinese)** — Smooth the complete regularized Fisher test field. This removes output smoothing, inverse-matrix differentiation and the comparison with a smoothed Fisher matrix. The lower bound now closes with one fixed regularization parameter, sent to zero after the dimension and sample-ratio limits. Specialize the information identity to the scalar prediction channel.
 
 - **2026-10-24 fourth working revision (Chinese)** — Replace the separate odd and piecewise-linear expansion arguments by one induction on source depth, preserving quadratic diagonal and one-remaining-factor cases. Define projections and slice Gram matrices at first use and replace ambiguous geometric terminology.
 

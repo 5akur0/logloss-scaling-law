@@ -40,7 +40,6 @@
 \begin{fullwidth}
 
 \section{模型、激活类与定理}
-\newthought*{中心化和归一化是模型的明确假设。}
 固定 $L\ge1$，$k_0=d$，$k_\ell/d\to\gamma_\ell\in(0,\infty)$，$\gamma_0=1$。
 第 $\ell$ 层权重为 $W^{(\ell)}\in\R^{k_\ell\times k_{\ell-1}}$，其元素独立标准高斯。输入 $x\sim N(0,I_d)$ 独立于参数。本文每层使用同一固定激活 $\sigma_\ell\equiv\sigma$，且
 \[
@@ -123,7 +122,6 @@ $m$ 可依赖固定激活，但不随维数或样本数变化；后文常数允�
 先取 $d\to\infty$，再取 $\alpha\to\infty$。不要求固定 $\alpha$ 的风险极限存在；不据此扩展到未中心化模型、层间任意混用两支、增长深度或非高斯输出下同一精确常数的上界。
 
 \section{三个激活为何属于此类}
-\newthought*{只需验证上述标量函数性质。}
 对任意固定 $a>0$，令
 \[
 s_a^2=\E\tanh^2(aG)>0,\qquad \sigma_a(z)=\tanh(az)/s_a.
@@ -240,7 +238,6 @@ D\le\sqrt{DB_F}+4e_d\le(D+B_F)/2+4e_d,
 误差对耦合一致。附录 \ref{app:matching} 通过逐层匹配证明式 \eqref{eq:matching}，右侧仍为函数距离的平方。映射可包含行符号变换；后文用这些有限标签控制条件熵，不要求它们保持实际网络输出。
 
 \section{互信息界与后验收缩}
-\newthought*{先由先验矩控制后验参数距离。}
 记 $I_{d,n}=I(\theta^0;\mathcal D_n)=I(W;\mathcal D_n)$。Bayes 定义和样本条件独立性给出
 \begin{equation}\label{eq:increment}
 \epsilon_{\log,d,n}=I_{d,n+1}-I_{d,n},\qquad
@@ -830,7 +827,8 @@ $\operatorname{Flat}_{S|S^c}$ 表示按索引位置分组的矩阵化。
 同一父索引产生的多个因子仍共享该索引。依赖两网络的映射只能作用在停止展开的叶节点上，
 每个映射输出一个张量因子；输出多个因子的非线性映射须先按原计算树展开并纳入系数张量。
 
-\paragraph{引理（展开算子的范数）。}
+\refstepcounter{lemma}
+\paragraph{引理~\thelemma（展开算子的范数）。}
 把上述展开作用于全部保留因子的复合映射称为展开算子。任意固定次数的此类复合均有界。具体地，令
 $\Delta_q e_a=e_a^{\otimes q}$，则
 $J=(\bigotimes_tU_t^*)\Delta_q$，而 $\Delta_q$ 为等距嵌入，故
@@ -841,7 +839,8 @@ $e_a\mapsto\bigotimes_jf_a^{(j)}$ 有界。
 且对半正定矩阵 $X\preceq bI,Y\succeq0$，
 $X\circ Y\preceq b\operatorname{diag}(Y)$。
 
-\paragraph{引理（展开保持范数和切片界）。}
+\refstepcounter{lemma}
+\paragraph{引理~\thelemma（展开保持范数和切片界）。}
 \label{fp:core-closure}
 设 $E$ 有 $r$ 个模式，满足
 \begin{equation}
@@ -892,7 +891,8 @@ $\|Qe_j\|^2/n_{b-1}\leq C/d$ 的高斯变量，尾界与有限并合即得第二
 不同深度均可停止展开，但根到叶的内部路径仍只含原网络矩阵。
 以下坐标切片估计始终用于这样重建的原系数张量。
 
-\paragraph{引理（线性路径的精确求和）。}
+\refstepcounter{lemma}
+\paragraph{引理~\thelemma（线性路径的精确求和）。}
 \label{fp:core-linear}
 令底层行向量为 $b_j$，父层矩阵为 $U=(u_{aj})$，并设
 $z_a=\sum_ju_{aj}b_j$。一个父节点有 $t$ 个线性子槽以及次数
@@ -928,7 +928,8 @@ $\mathbb E\operatorname{tr}\exp(\lambda_{\rm c}\sum_jg_jH_j)
 配合 $\lambda_{\rm c}=t/s^2$ 得到上尾，对负号重复即得双侧界。
 以下只用其维数为固定 $d$ 次幂时的 $O(s\sqrt{\log d})$ 结论。
 
-\paragraph{引理（同层旋转下的坐标切片）。}
+\refstepcounter{lemma}
+\paragraph{引理~\thelemma（同层旋转下的坐标切片）。}
 \label{fp:core-fresh}
 在同一原网络层，同时展开所有尚未停止的模式。选择当前高斯层矩阵的列索引所对应的模式 $p$：
 它随该层矩阵右乘正交矩阵而旋转，不包括保留的父索引 $e_a$ 或其确定性复制。
@@ -961,7 +962,8 @@ $\|g\|\geq c\sqrt d$ 的高斯尾界，给均匀球面向量 $u=g/\|g\|$
 故 Haar 后的估计转回原坐标即为所需式。所有核和模式只有固定有限种。
 \hfill$\square$
 
-\paragraph{推论（重复坐标项的范数）。}
+\refstepcounter{lemma}
+\paragraph{推论~\thelemma（重复坐标项的范数）。}
 \label{fp:core-collision}
 若至少两个模式对应同一高斯层矩阵的列索引，且总模式数至少三，则其中至少两个索引取相同值的部分满足
 \begin{equation}
@@ -973,7 +975,8 @@ $\|g\|\geq c\sqrt d$ 的高斯尾界，给均匀球面向量 $u=g/\|g\|$
 在该层引入这些模式时先估计这一部分，再将误差通过有界的展开算子传递，最终误差仍为 $o(1)$。
 这里只删除不同原节点的索引恰取相同值的项；同一父索引的确定性复制仍须保留。
 
-\paragraph{原始系数的矩与坐标界。}
+\refstepcounter{lemma}
+\paragraph{推论~\thelemma（原始系数的矩与坐标界）。}
 \label{fp:core-raw-collision-expectation}
 设 $C_R$ 为固定深度、固定次数、零常数高斯多项式网络的原始 $R$ 阶系数，
 允许保留有序因子、对称化及固定有限个展开项的和。对每个固定 $0<p<\infty$，
@@ -997,7 +1000,8 @@ $\mathbb E\|\operatorname{Coll}_R C_R\|^2\le L_d/d+
 (\mathbb E\|C_R\|^4)^{1/2}O(d^{-M/2})=o(1)$。
 这里只控制原始系数，尚未施加依赖两个网络的外部映射。
 
-\paragraph{两个父索引的收缩与二阶非对角项。}
+\refstepcounter{lemma}
+\paragraph{引理~\thelemma（两个父索引的收缩与二阶非对角项）。}
 \label{fp:core-two-parent}
 在一个未加掩码的原始切口中，设不同父模式 $p,q$ 的所选线性槽与教师行
 收缩后给出 $\eta_i,\zeta_i$，其 $\ell^2$ 范数有界。模式 $p$ 是本层引入的模式，
@@ -1025,12 +1029,13 @@ $\max_{a\ne b}|D_{ab}|\le L_d/d$；保留两标签后施加完整特征映射，
 \subsection{保留剩余因子的局部收缩估计}
 \label{fp:core-residual-section}
 
-\paragraph{未收缩因子的矩阵化界。}\label{fp:core-residual-flat}
+\refstepcounter{lemma}
+\paragraph{引理~\thelemma（未收缩因子的矩阵化界）。}\label{fp:core-residual-flat}
 设 $F_a=\sum_bU_{ab}Q_b$，其中 $U$ 是原高斯层或固定连续积，
 $Q_b$ 为正次数计算树展开项；不同高度的停止展开的叶节点允许任意有界自适应单槽映射。
 完整家族 $e_a\mapsto F_a$ 有界。若 $F_a$ 至少有两个张量因子位置，则其每个
 非平凡对输出因子的矩阵化至多 $C\delta_d$，同时对所有 $a$ 成立：以
-$U_{a,:}$ 为读出重建裸核，式~\eqref{fp:core-product-event} 给读出的范数与
+$U_{a,:}$ 为读出重建原系数张量，式~\eqref{fp:core-product-event} 给读出的范数与
 最大坐标，展开保持范数和切片界的引理给矩阵化界，最后的单槽映射保持这些界。
 家族有界性来自展开算子与 $U^*$ 的复合。单槽收缩因子同样是有界家族，
 不需要非平凡矩阵化估计。同指标乘积家族由对角嵌入保持有界。
@@ -1069,12 +1074,12 @@ $G_{ia}$ 的范数至多 $\kappa_d$。随后在每个 $i$ 块内提升本列剩�
 收缩本叶余槽，并分析其余教师叶。这是从完整源系数到完整教师系数的
 有界算子复合，故没有逐 $i$ 求和或部分迹损失。
 
-以下考虑本叶全部位于该列。固定 $i$，按本叶如何消费各残余因子，分为
-全消费、部分消费、全在外。全消费因子产生 $\ell^2$ 有界向量 $\eta$；
-部分消费因子产生逐列范数至多 $C\delta_d$ 的有界家族；全在外家族仍有界。
-记本列收缩后算子为 $B_i$。若存在部分消费因子，则
+以下考虑本叶全部位于该列。固定 $i$，按本叶如何收缩各剩余因子，分为
+完全收缩、部分收缩、完全保留。完全收缩的因子产生 $\ell^2$ 有界向量 $\eta$；
+部分收缩的因子产生逐列范数至多 $C\delta_d$ 的有界家族；完全保留的因子族仍有界。
+记本列收缩后算子为 $B_i$。若存在部分收缩的因子，则
 $\|B_i\|_{\rm HS}^2\le C\delta_d^2\sum_a|G_{ia}|^2$。
-否则至少一个因子全消费，故
+否则至少一个因子完全收缩，故
 $\|B_i\|_{\rm HS}^2\le C\kappa_d^2\sum_a|\eta_a|^2$。
 于是 $\|B_i\|_{\rm HS}\le C(\delta_d+\kappa_d)$。
 对第二项，其他源模式的展开算子记为 $T$，Hilbert--Schmidt 理想不等式给
@@ -1114,7 +1119,7 @@ $b_j=\E[(\sigma(G)^2-1)\psi_j(G)]$。
 
 \paragraph{局部矩估计。}
 以下估计均只涉及单网络边缘分布。
-这些结论分别由定理~\ref{an:moments}、条件行估计~\ref{an:scalar}
+这些结论分别由引理~\ref{an:moments}、条件行估计~\ref{an:scalar}
 及~\ref{an:derivatives} 中的高斯矩阵网格尾界证明。
 对固定层数、固定 $p<\infty$，有
 \begin{equation}\label{fp:actual-local-interface}
@@ -1299,14 +1304,9 @@ $t=1$ 时直接有 $\Pi_NF_1^f=R_{1,N}[H_f]+o_{L^2}(1)$：条件均值的线性�
 
 \subsection{重复索引项与多项式近似公式}
 \label{fp:actual-quadratic}\label{fp:actual-telescope}
-推论~\ref{fp:core-raw-collision-expectation} 给出：固定零常数
-多项式网络的完整 $r\ge3$ 次系数满足
-\begin{equation}\label{fp:actual-raw-interface}
- \mathbb E\|\operatorname{Coll}_rD_r\|_{\rm HS}^2=o(1),\qquad
- \sup_d\mathbb E\|D_r\|_{\rm HS}^p<\infty\quad(p<\infty).
-\end{equation}
-这里 $\operatorname{Coll}_r$ 保留至少两个坐标索引相同的张量项。
-此估计要求使用未删去任何索引项的系数，不能直接用于 $J$ 的系数。二阶对角须单独计算。
+以下对完整上部多项式使用推论~\ref{fp:core-raw-collision-expectation} 的
+$r\ge3$ 重复索引估计及固定阶矩界；该推论不能直接用于受索引限制的 $J$。
+二阶对角另作如下计算。
 
 设输入宽度为 $k$ 的深度 $t$ 上部网络各层多项式为
 $p_j(z)=\sum_{r\ge1}g_{j,r}z^r$。其全二次系数满足
@@ -1368,7 +1368,7 @@ $A,p_1,\ldots,p_{t-1}$，$t\ge2$，有
 \]
 由于 $[p_{t-1}^2]_2=[p_{t-1}]_1^2$，二者相等；$s=t-1$ 时，减项
 恰好就是第一个多项式的确定二次对角部分。因此其差的二次对角为 $o_{L^2}(1)$；
-高于二次的重复索引项由\eqref{fp:actual-raw-interface} 分别为 $o_{L^2}(1)$，
+高于二次的重复索引项由推论~\ref{fp:core-raw-collision-expectation} 分别为 $o_{L^2}(1)$，
 一次项则没有重复索引。
 
 两项共用同一个下层展开映射，故确定对角部分在代入前精确抵消。
@@ -1432,8 +1432,7 @@ $\mu'=0$，不需引入 $\chi$ 或 $E_t$。
 本步得到的收缩因子先保留为输出，到下一步才参与后续收缩。
 
 \subsection{剩余张量与最低非线性节点}
-\newthought*{保留完整余张量。}
-教师当前原始齐次系数记作 $C$。完成的输出位置采用恒等映射，未完成位置采用有界齐次幂列映射。固定一个活动教师行 $i$ 后，其余全部输出因子的范数因此至多为 $K_d\|C(e_i,\cdot)\|_{\rm HS}$，而
+教师当前原始齐次系数记作 $C$。完成的输出位置采用恒等映射，未完成位置采用有界齐次幂列映射。固定当前教师行 $i$ 后，其余全部输出因子的范数因此至多为 $K_d\|C(e_i,\cdot)\|_{\rm HS}$，而
 \begin{equation}\label{fp:teacher-slices}
  \sum_i\|C(e_i,\cdot)\|_{\rm HS}
  \le \sqrt{k}\|C\|_{\rm HS}\le K_d\sqrt d.
@@ -1536,12 +1535,9 @@ $\max|A_{ij}|\le\kappa_d$，从而 $\max|AM|\le K_d\kappa_d$，
 
 非对角部分由双父收缩估计~\ref{fp:core-two-parent}的二阶情形控制，完整配对为 $o(1)$。
 
-对于对角，式~\eqref{fp:actual-diag} 的原始二次系数估计给出
-\begin{equation}\label{fp:coherent-diagonal}
- \operatorname{Diag}D=\lambda_s I/\sqrt{k_s}+E_s,
- \qquad\mathbb E\|E_s\|_{\rm HS}^2=o(1).
-\end{equation}
-先用源侧完整特征映射的算子范数界控制误差。主项识别两个原始父标签，把它们的两个选中根单项式相乘，保留所有有序孩子与完全相同的教师槽分配。得到高度 $s<t$、读出 $1/\sqrt{k_s}$ 的原始前缀展开项，乘精确确定性系数 $\lambda_s$。其根可有任意奇偶性，所以必须使用上述加强归纳类。已完成的收缩矩阵可展开回原始槽收缩；它们是等式，故融合不产生残缺子树。若 $s=0$，只剩输入次数二，不能贡献 $N>2$。
+对角由式~\eqref{fp:actual-diag} 分为 $\lambda_s I/\sqrt{k_s}$ 与
+Hilbert--Schmidt 范数为 $o_{L^2}(1)$ 的误差；后者由源侧完整特征映射的算子范数界控制。
+主项识别两个原始父标签，把它们的两个选中根单项式相乘，保留所有有序孩子与完全相同的教师槽分配。得到高度 $s<t$、读出 $1/\sqrt{k_s}$ 的原始前缀展开项，乘精确确定性系数 $\lambda_s$。其根可有任意奇偶性，所以必须使用上述加强归纳类。已完成的收缩矩阵可展开回原始槽收缩；它们是等式，故融合不产生残缺子树。若 $s=0$，只剩输入次数二，不能贡献 $N>2$。
 
 两个索引也可能分别对应较高层已算出的收缩因子和当前层刚展开的因子。
 它们来自不同层，不使用上述同层对角删除。若较高层因子参与本次收缩，采用保留根索引的论证；若暂不参与，本次只涉及一个父索引。
@@ -1549,10 +1545,10 @@ $\max|A_{ij}|\le\kappa_d$，从而 $\max|AM|\le K_d\kappa_d$，
 同一父索引的确定性复制也按其代表的原输入因子数计数，不增加不同父节点的数目。
 
 现在考虑已有收缩因子用于下一步时，同一源节点还带其他完整因子的项。
-若当前教师节点的 $m$ 个因子还涉及另一个源父节点，使用引理~\ref{fp:core-split-hit}；
-若全部来自同一个源父节点，而停止展开后的原系数张量至少有两个索引，使用引理~\ref{fp:core-hybrid-Rge2}。
+若当前教师节点的 $m$ 个因子还涉及另一个源父节点，使用引理~\ref{fp:core-local-contraction} 的第 1 项；
+若全部来自同一个源父节点，而停止展开后的原系数张量至少有两个索引，使用引理~\ref{fp:core-local-contraction} 的第 2 项。
 因此只剩原系数张量有一个索引的情形。指定收缩因子之外若至少还有两个因子，
-使用引理~\ref{fp:core-hybrid-R1}；若没有其他因子，该项保留。
+使用引理~\ref{fp:core-local-contraction} 的第 3 项；若没有其他因子，该项保留。
 
 若恰有一个其他因子，只需判断它是完整原孩子还是已有收缩因子。
 这是因为这里只使用先前已证明完整的步骤，每次仅将 $m$ 个完整原孩子
@@ -1595,19 +1591,13 @@ $t=L$ 时所有二阶对角合并项已由较低高度排除，而每条路径�
 \newthought*{先控制各自先验下的误差，再对耦合取上确界。}
 固定次数和深度时，有序展开项、因子配对、停止展开的位置选择、合并高度及收缩步骤的种类数均与 $d$ 无关。分别在两个边缘上同时施加所有前述原始高斯事件，然后才允许跨网络收缩矩阵依赖两个网络。在共同好事件上，各项估计均为确定性 $o(1)$。在坏事件上，用固定次数系数的有界边缘高阶矩和 H\"older 不等式；坏事件概率可取任意所需多项式阶。该控制不依赖耦合，因此对所有先验边缘耦合一致。
 
-设 $T_W$ 为与激活对应、带完整标量系数的全 $m$ 平衡齐次输入混沌项，并记式~\eqref{fp:actual-U} 的有限原始多项式家族为 $\mathcal Q_N(V)$。上文逐展开项结论给出
-\begin{equation}\label{fp:profile-pairing}
- \sup_{\pi\in\Gamma(\mathsf P_W,\mathsf P_V)}
- \mathbb E_\pi\left|\langle T_W,\mathcal Q_N(V)-T_V\rangle\right|
- \longrightarrow0.
-\end{equation}
-又 $T_W$ 完全位于第 $N$ 输入混沌，故 $\langle T_W,F_V\rangle=\langle T_W,\Pi_NF_V\rangle$。由式~\eqref{fp:actual-final}，每个网络在自身边缘下的展开余项由 Cauchy--Schwarz 控制：
-\[
- \mathbb E_\pi|\langle T_W,\Pi_NF_V-\mathcal Q_N(V)\rangle|
- \le(\mathbb E\|T_W\|^2)^{1/2}
-      (\mathbb E\|\Pi_NF_V-\mathcal Q_N(V)\|^2)^{1/2}=o(1).
-\]
-结合\eqref{fp:profile-pairing}得到所需全局函数比较
+设 $T_W$ 为与激活对应、带完整标量系数的全 $m$ 平衡齐次输入混沌项，
+$\mathcal Q_N(V)$ 为式~\eqref{fp:actual-U} 的多项式近似。
+上述逐展开项估计给出 $\mathbb E_\pi|\langle T_W,\mathcal Q_N(V)-T_V\rangle|=o(1)$，对耦合一致。
+又 $T_W$ 位于第 $N$ 输入混沌，故 $\langle T_W,F_V\rangle=\langle T_W,\Pi_NF_V\rangle$。
+剩余配对期望由 Cauchy--Schwarz 不等式控制为
+$\|T_W\|_{L^2(W,X)}\|\Pi_NF_V-\mathcal Q_N(V)\|_{L^2(V,X)}=o(1)$；
+这里使用有界边缘二阶矩与式~\eqref{fp:actual-final}，同样对耦合一致。因此
 \begin{equation}\label{fp:global-function-pairing}
  \boxed{\displaystyle
  \sup_{\pi\in\Gamma(\mathsf P_W,\mathsf P_V)}
@@ -1615,7 +1605,6 @@ $t=L$ 时所有二阶对角合并项已由较低高度排除，而每条路径�
 \end{equation}
 
 \section{齐次比较网络的全局匹配}\label{hm:section}\label{app:matching}
-\newthought*{齐次系数差控制参数匹配距离。}
 本节仅讨论激活为 $c_m z^m$、$c_m=(m!)^{-1/2}$ 的齐次网络。固定 $L$ 与整数 $m\ge5$，令 $k_0=d$，$cd\le k_s\le Cd$，并定义
 \[
  h^{(0)}=x,\qquad h^{(s)}=c_m(W^{(s)}h^{(s-1)}/\sqrt{k_{s-1}})^{\odot m},\qquad
@@ -1694,7 +1683,6 @@ $\sum_Ic_I^2=\|\mathrm{SF}C_s\|^2$，且 $c_I$ 是对应互异张量坐标的 $\
 所有这些边缘事件可同时选取，失败概率趋于零。有符号行列置换保持行范数、算子范数、相干度、最大坐标及列平方和；下游系数张量只发生坐标重排和符号变化。因此其范数、最大系数绝对值、式~\eqref{hm:mode} 的切片界，以及重复指标部分的范数界均保持。即使根据两个网络选择对齐，这些确定性界仍成立。
 
 \subsection{全局对称与分组张量的精确换算}
-\newthought*{单位行归一化与全局对称化的系数。}
 在第 $s$ 层写 $w_i=W^{(s)}_{i:}/\sqrt{k_{s-1}}=r_i a_i$，$\|a_i\|=1$，
 $R=\operatorname{diag}(r_i^m)$，$\overline C_s=R^{\otimes q_s}C_s$。精确代入为
 \begin{equation}\label{hm:substitution}
@@ -1813,7 +1801,6 @@ $1-\rho_0^{m-2}$ 控制；已匹配行使用 $1-x^m\le\frac m{m-2}(1-x^{m-2})$�
 \end{equation}
 
 \subsection{内部符号传播与终层对齐}
-\newthought*{终层只需匹配参数。}
 内部层 $s<L$ 的有符号行置换写作 $S_s=D_sP_s$，其中 $D_s$ 对角元为 $\pm1$。隐特征相应变为
 $R_sh^{(s)}$，$R_s=D_s^{m\bmod2}P_s$。同时以 $V^{(s+1)}R_s^{-1}$ 替换下一层矩阵，整个齐次函数精确保持不变。奇数 $m$ 将符号传播到下一层列，偶数 $m$ 仅传播排列；形式下游系数相应重排、变号，前述典型事件保持。
 
@@ -1826,7 +1813,6 @@ $\overline c_i^A=r_i^m/\sqrt{k_L}$。这样表示的原学生张量不变，式~
 也不要求这个终层标签保持网络函数。
 
 \subsection{深度归纳与任意先验耦合}
-\newthought*{完成定理的证明}
 令 $E_0=\|C_0(W)-C_0(V)\|^2$。自下而上在内部层选择有符号匹配、传播至下一层列，记当前对齐后的形式张量误差为 $E_s$。内部对称变换保持当前 $C_{s-1}$，且以后对齐不再改变已完成的较低层。因此 \eqref{hm:sym-group}、\eqref{hm:row-loss}、\eqref{hm:recover} 在每个内部层给出
 \[
  E_s\le CE_{s-1}+e_d,\qquad

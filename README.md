@@ -53,6 +53,8 @@ pdflatex scaling-proof.tex
 
 ## Changelog
 
+- **2026-10-24 eighth working revision (Chinese)** — Remove three repeated interfaces and four intermediate displays. Give the tensor lemmas distinct reference numbers and identify the relevant item in the local contraction lemma; replace the remaining metaphorical contraction wording.
+
 - **2026-10-24 seventh working revision (Chinese)** — 29 to 27 pages: one conditional-entropy estimate handles both parameter information and auxiliary-observation cost; one relative-entropy identity controls cumulative and incremental information. Share coefficient moment, coordinate and repeated-index estimates across the geometric proofs. Obtain the polynomial correction formula directly by cancelling its deterministic quadratic diagonal. Remove duplicated model definitions and proof summaries; shorten moment and Hessian estimates while retaining all boundary cases.
 
 - **2026-10-24 sixth working revision (Chinese)** — Describe geometric contraction steps using parent indices, remaining factors and stopping positions. Remove metaphorical descriptions while preserving the original hypotheses, displays and labels.

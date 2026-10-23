@@ -161,36 +161,26 @@ a_6=\frac{3b\sqrt{2/\pi}}{\sqrt{6!}}\ne0.
 这正是后文两类展开项所使用的奇偶结构。
 
 \section{先验矩与局部估计}
-以下先验矩估计用于控制线性近似误差和后验抽样误差。
-令 $q_\ell=\norm{h^{(\ell)}}^2/k_\ell$，$q_0=\norm X^2/d$。对固定 $r>0$，所需结论为
-\begin{equation}\label{eq:moments}\begin{aligned}
-\E|q_\ell-1|^r&\le C_r d^{-r/2},\qquad
-\sup_d\E|F_\theta^{(L)}(X)|^r<\infty,\\
-\sup_d\E\norm{\nabla_WF_\theta^{(L)}(X)}^r&<\infty.
-\end{aligned}\end{equation}
-
-输出与范数矩由附录引理 \ref{an:moments} 证明；其中保留了全一读出的条件均值
-$\sqrt{k_L}\,\mathbb E[\sigma(\sqrt{q_{L-1}}G)]$。
-梯度矩及光滑支的 $\mathbb E\|\nabla_W^2F\|_{\rm HS}^2\le C$
-由引理 \ref{an:derivatives} 的前向、反向递推与 Hessian 分解给出。
-
-令 $a(W,X)=\nabla_WF_{\theta(W)}^{(L)}(X)$。引理 \ref{an:ou} 给出两支共用的
-梯度变化估计：对独立标准高斯 $Z$ 和 $0<\tau\le1$，
+令 $q_\ell=\|h^{(\ell)}\|^2/k_\ell$、$a(W,X)=\nabla_WF_{\theta(W)}^{(L)}(X)$。
+附录引理~\ref{an:moments}--\ref{an:ou} 证明：对每个固定 $r>0$，
+\begin{equation}\label{eq:moments}
+ \E|q_\ell-1|^r\le C_r d^{-r/2},\qquad
+ \E|F_{\theta(W)}^{(L)}(X)|^r+\E\|a(W,X)\|^r\le C_r.
+\end{equation}
+对与 $(W,X)$ 独立的标准高斯 $Z$，还有
 \begin{equation}\label{eq:gradient-stability}
  W_\tau=e^{-\tau}W+\sqrt{1-e^{-2\tau}}Z,\qquad
- \E\|a(W_\tau,X)-a(W,X)\|^2\le C\sqrt\tau.
+ \E\|a(W_\tau,X)-a(W,X)\|^2\le C\sqrt\tau\quad(0<\tau\le1).
 \end{equation}
-
-
-
-记 $\theta(t)=\theta(W(t))$。令 $W(t)=\sqrt{1-t}W+\sqrt tZ$ 为保持先验的 OU 耦合。高斯 Hermite 展开给出
-\begin{equation}\label{eq:ou-rem}\begin{aligned}
-F_{\theta(t)}^{(L)}-F_\theta^{(L)}&=\sqrt t\,(\nabla_W F_\theta^{(L)})^TZ+E_t,\\
-\E\norm{E_t}_{L_X^2}^2&\le Ct^{1+\delta},\qquad
-\delta=\begin{cases}1,&\text{光滑支},\\1/2,&\text{分段线性支}.
-\end{cases}
-\end{aligned}\end{equation}
-该余项估计针对上述保持高斯先验的扰动，常数与维数无关。
+对 $0<t\le1/2$，写 $W(t)=\sqrt{1-t}W+\sqrt tZ$，则一阶展开满足
+\begin{equation}\label{eq:ou-rem}
+ \begin{aligned}
+ F_{\theta(W(t))}^{(L)}-F_{\theta(W)}^{(L)}&=\sqrt t\,a(W,\cdot)^TZ+E_t,\\
+ \E\|E_t\|_{L_X^2}^2&\le Ct^{1+\delta},\qquad
+ \delta=1\ \text{（光滑支）},\quad\delta=1/2\ \text{（分段线性支）}.
+ \end{aligned}
+\end{equation}
+常数和维数阈值均对扰动参数一致；后文两支统一使用 $\delta=1/2$。
 
 \section{全局函数比较与参数匹配}
 本节证明：两个网络的输出接近时，其参数在适当排列和符号变换后也接近。先用一个齐次多项式网络提取实际输出中可比较的分量。
@@ -202,9 +192,12 @@ N=m^L,\qquad S=1+m+\cdots+m^{L-1},\qquad B=a_m^S\ne0.
 \[
 H_m(W)=I_N(C_N(W)),\qquad T_W=BH_m(W).
 \]
-这里 $I_N$ 将对称张量映为第 $N$ 阶 Hermite 多项式：
+记 $\Pi_N$ 为 $L^2(P_X)$ 到第 $N$ 阶 Hermite 子空间的正交投影。$I_N$ 将对称张量映为该子空间中的多项式：
 对 $v\ne0$，$I_N(v^{\otimes N})(X)=\|v\|^N\operatorname{He}_N(\langle v,X\rangle/\|v\|)$，再线性延拓。
-它满足 $\langle I_N(C),I_N(D)\rangle_{L_X^2}=N!\langle C,D\rangle$。
+其归一化满足
+\begin{equation}\label{fp:actual-isometry}
+ \langle I_N(C),I_N(D)\rangle_{L_X^2}=N!\langle C,D\rangle.
+\end{equation}
 张量均取对称张量空间中继承的 Hilbert 范数。
 
 \begin{lemma}[函数内积的统一估计]\label{lem:cross}
@@ -216,33 +209,12 @@ e_d:=\sup_{\pi\in\Gamma(\Pi_d,\Pi_d)}
 这里允许任意正确先验边缘的耦合，不要求 $W,V$ 独立。
 \end{lemma}
 \begin{proof}
-记 $\Pi_N$ 为 $L^2(P_X)$ 到第 $N$ 阶 Hermite 子空间的正交投影。先在各自先验下逼近 $\Pi_NF_\theta^{(L)}$。令
-\[
-P_N(z)=\sum_{j=1}^N\frac{a_jz^j}{\sqrt{j!}},\quad
-Q_N(z)=\sum_{j=1}^N\frac{\beta_jz^j}{\sqrt{j!}},
-\quad\beta_j=\E[(\sigma(G)^2-1)\psi_j(G)].
-\]
-取原网络的前 $t$ 层，末层激活改为多项式 $A$，其余层改为 $P_N$。展开这个多项式网络，取次数恰为 $N$ 的系数张量，再应用 $I_N$，所得函数记为 $R_{t,N}[A;P_N]$。
-光滑奇支有
-\[
-\Pi_NF_\theta^{(L)}=R_{L,N}[P_N;P_N]+o_{L^2(W,X)}(1).
-\]
-分段线性支令 $\mu=bc_0/2$、$U_N=[Q_N-P_N^2]_{\le N}$，则实际公式为
-\begin{equation}\label{eq:rawclosure}\begin{aligned}
-\Pi_NF_\theta^{(L)}={}&R_{L,N}[P_N;P_N]\\
-&+\mu\sum_{t=1}^{L-1}\sqrt{k_L/k_t}\,R_{t,N}[U_N;P_N]
-+o_{L^2(W,X)}(1).
-\end{aligned}\end{equation}
-$U_N$ 可同时含奇次项和偶次项。式 \eqref{eq:rawclosure} 中较浅网络的修正项来自条件均值与重复索引的二次项，推导见附录 \ref{app:closure}。
-
-逐层展开多项式后，每一项可由有序树记录：节点标明所选幂次，叶对应张量因子。次数和深度固定，所以只有有限种展开项。附录 \ref{app:cuts} 按层证明：与 $T_W$ 取内积时，深度 $L$ 中只有每个节点均取 $m$ 次项的贡献保留，其余项以及所有较浅网络的贡献均为 $o(1)$。保留项的 $S$ 个节点各贡献 $a_m$，因此恰为 $T_V$。
-
-这些估计在分别由各网络参数确定的高概率事件上成立；事件补集由固定高阶矩控制，因此估计对两个网络的任意先验边缘耦合一致。若实际逼近误差为 $E_d(V)$，则
-\[
-\E_\pi|\langle T_W,E_d(V)\rangle|
-\le(\E\norm{T_W}^2)^{1/2}(\E\norm{E_d(V)}^2)^{1/2}=o(1).
-\]
-这只用边缘，不用两网络独立性。因 $T_W$ 位于第 $N$ 阶 Hermite 子空间，与其他 Hermite 阶数的分量正交，得到 \eqref{eq:cross}。
+附录~\ref{app:closure} 将实际输出的第 $N$ 阶 Hermite 投影逼近为有限个多项式网络的系数。
+其中分段线性支的较浅网络修正项也全部保留。
+附录~\ref{app:cuts} 用统一的深度归纳证明：这些项与 $T_W$ 配对时，
+只有深度 $L$、每个节点次数均为 $m$ 的项保留，其 $S$ 个系数给出 $B$，故恰为 $T_V$。
+单网络逼近误差由 Cauchy--Schwarz 控制；所有界只使用各自先验边缘，
+因而对耦合一致。完整推导见式~\eqref{fp:global-function-pairing}。
 \end{proof}
 
 \subsection{从函数比较到参数匹配}
@@ -265,7 +237,7 @@ D\le\sqrt{DB_F}+4e_d\le(D+B_F)/2+4e_d,
 &\le C\E\norm{H_m(W)-H_m(V)}^2+o_d(1)\\
 &\le C\E\norm{F_\theta^{(L)}-F_{\theta'}^{(L)}}^2+o_d(1).
 \end{aligned}\end{equation}
-误差对耦合一致。附录 \ref{app:matching} 通过逐层匹配证明式 \eqref{eq:matching}，右侧仍为函数距离的平方。映射可包含行符号变换；后文只将 $gV$ 用作高斯混合分布的中心，因此不要求这些变换保持实际网络输出。
+误差对耦合一致。附录 \ref{app:matching} 通过逐层匹配证明式 \eqref{eq:matching}，右侧仍为函数距离的平方。映射可包含行符号变换；后文用这些有限标签控制条件熵，不要求它们保持实际网络输出。
 
 \section{互信息界与后验收缩}
 \newthought*{先由先验矩控制后验参数距离。}
@@ -290,56 +262,57 @@ D\le\sqrt{DB_F}+4e_d\le(D+B_F)/2+4e_d,
  \qquad(u\text{ 充分大}).
 \end{equation}
 
-\subsection{从 KL 到函数距离，再到匹配距离}
-\newthought*{平均后验样本仍有精确的先验边缘。}
-给定 $\mathcal D_n$ 独立抽取 $W,V$；平均数据后各自服从 $\Pi_d$。若 $B_X=F_\theta^{(L)}(X)-F_{\theta'}^{(L)}(X)$，高斯 Hellinger 比较给出
+\subsection{后验参数距离与条件熵}
+给定 $\mathcal D_n$ 独立抽取后验样本 $W,V$；平均数据后两者保持原先验边缘。
+记 $B_X=F_{\theta(W)}^{(L)}(X)-F_{\theta(V)}^{(L)}(X)$。
+以后验预测密度为中间点，Hellinger 三角不等式和 $H^2\le\KL$ 给
 \begin{equation}\label{eq:hellinger}
-\E[1-e^{-B_X^2/(8\Delta)}]\le2\epsilon_{\log,d,n}.
+ \E[1-e^{-B_X^2/(8\Delta)}]\le2\epsilon_{\log,d,n},
 \end{equation}
-理由是 Hellinger 距离在 $L^2$ 平方根密度空间满足三角不等式；以后验预测密度为中间点，再用 $(x+y)^2\le2x^2+2y^2$，两个后验样本的平均平方距离至多四倍单样本平方距离，而后者由 KL 控制。高斯两均值的亲和度恰为 $e^{-B_X^2/(8\Delta)}$。
-
-对固定 $q>2$，先在 $B_X^2\le8\Delta$ 上使用
-$1-e^{-x}\ge(1-e^{-1})x$，得到截断二阶矩 $\le C\epsilon_{\log,d,n}$。在补集上，\eqref{eq:hellinger} 控制概率，\eqref{eq:moments} 控制 $q$ 阶矩，Hölder 给出
+其中指数项是两个同方差高斯密度的亲和度。对固定 $q>2$，标量不等式
 \[
-\E[B_X^2\boldsymbol1_{B_X^2>8\Delta}]
-\le(\E|B_X|^q)^{2/q}\Pr(B_X^2>8\Delta)^{1-2/q}
-\le C_q\epsilon_{\log,d,n}^{1-2/q}.
+ z^2\le C_q(1+|z|^q)^{2/q}
+          (1-e^{-z^2/(8\Delta)})^{1-2/q}
 \]
-因此
+由分别考察 $|z|\le1$ 和 $|z|>1$ 得到。H\"older 与 \eqref{eq:moments} 因而给
+$\E B_X^2\le C_q\epsilon_{\log,d,n}^{1-2/q}$。定义
 \[
-\E\norm{F_\theta^{(L)}-F_{\theta'}^{(L)}}_{L_X^2}^2
-\le C_q(\epsilon_{\log,d,n}+\epsilon_{\log,d,n}^{1-2/q}).
+ r_{d,n}=\frac1p\E\min_{g\in\mathcal G_d}\|W-gV\|^2,
+ \qquad r_*(u)=\limsup_d r_{d,\lfloor ud^2\rfloor}.
 \]
-将 \eqref{eq:matching} 应用于这一后验耦合，定义
-\[
-r_{d,n}=\frac1p\E\min_{g\in\mathcal G_d}\norm{W-gV}^2,
-\qquad r_*(u)=\limsup_d r_{d,\lfloor ud^2\rfloor}.
-\]
-取 $q=2/\eta$，$0<\eta<1$，由 \eqref{eq:coarse} 得
+在 \eqref{eq:matching} 中取此后验耦合，再取 $q=2/\eta$，由 \eqref{eq:coarse} 得
 \begin{equation}\label{eq:rate}
-r_*(u)\le C_\eta\left(\frac{\log u}{u}\right)^{1-\eta}.
+ r_*(u)\le C_\eta(\log u/u)^{1-\eta},\qquad0<\eta<1.
 \end{equation}
-这里只固定一次矩阶数，不令其随维度增长。
 
-
-\subsection{由后验参数距离得到互信息下界}
-给定 $\mathcal D_n$ 独立抽取后验样本 $W,V$，选使
-$\|W-gV\|$ 最小的可测标签。条件独立性、有限标签熵及高斯最大熵给
+在同一耦合中选择可测最优标签 $\widehat g$，并令
+$V_t=\sqrt{1-t}W+\sqrt tU$，其中 $U$ 独立于上述变量且为标准高斯，$0\le t\le1/2$。
+给定 $\mathcal D_n$，$V$ 与 $V_t$ 独立；且
 \[
- h(W\mid\mathcal D_n)=h(W\mid\mathcal D_n,V)
- \le\log|\mathcal G_d|+\frac p2\log(2\pi e r_{d,n}).
+ \E\|V_t-\sqrt{1-t}\widehat gV\|^2=p[t+(1-t)r_{d,n}].
 \]
-因 $W\sim N(0,I_p)$，有
-$I_{d,n}/p\ge\tfrac12\log(1/r_{d,n})-p^{-1}\log|\mathcal G_d|$。
-结合 \eqref{eq:rate}，对每个固定 $0<\eta<1$ 及充分大的固定 $\alpha$，
+条件于 $(\mathcal D_n,V,\widehat g)$ 后用高斯最大熵，再用 Jensen，得到
+\begin{equation}\label{info:matched-entropy}
+ h(V_t\mid\mathcal D_n)
+ \le\log|\mathcal G_d|+\frac p2\log\{2\pi e[t+(1-t)r_{d,n}]\}.
+\end{equation}
+这里加入标签的条件熵至多为 $\log|\mathcal G_d|$。
+$t=0$ 时 $V_0=W$；从 $h(W)=\frac p2\log(2\pi e)$ 减去上述界并用 \eqref{eq:rate}，得
 \begin{equation}\label{eq:sample-information-lower}
  \liminf_d\frac{I_{d,\lfloor\alpha d^2\rfloor}}p
  \ge\frac{1-\eta}{2}\log\alpha
        -\frac{1-\eta}{2}\log\log\alpha-C_\eta.
 \end{equation}
-\section{线性高斯参考分布与互信息增量}
-令 $V_t=\sqrt{1-t}W+\sqrt tU$，其中 $U$ 为独立标准高斯，
-$0<t\le1/2$。反向写为
+这里 $\eta\in(0,1)$ 固定，$\alpha$ 充分大。
+对 $t>0$，记 $J_n(t)=I(W;V_t\mid\mathcal D_n)$。
+从 \eqref{info:matched-entropy} 减去条件噪声熵，得到
+\begin{equation}\label{alt:oracle-cost}
+ J_n(t)\le\log|\mathcal G_d|+\frac p2\log\left(1+\frac{(1-t)r_{d,n}}t\right)
+ \le\log|\mathcal G_d|+\frac{p r_{d,n}}{2t}.
+\end{equation}
+
+\section{线性高斯参考分布与互信息界}
+对上述 $V_t$，$0<t\le1/2$ 时可反向写为
 $W=\sqrt{1-t}V_t+\sqrt t\xi$，其中 $\xi$ 与 $V_t$ 独立标准高斯。
 记 $f_W=F_{\theta(W)}^{(L)}$、$a(x)=\nabla f_{V_t}(x)$、
 $A=\E_Xa(X)a(X)^T$。已有 \eqref{eq:ou-rem}、\eqref{eq:moments} 给出
@@ -365,14 +338,14 @@ $f_{V_t}(X_i)+\sqrt t\,a(X_i)^T\zeta+\sqrt\Delta Z_i$ 产生，
  {q_j(Y_{1:j}\mid V_t,X_{1:j})},\qquad
  B_j=\E_{V_t}\KL(P_j\|Q_j).
 \]
-这里 $P_j,Q_j$ 均包含输入的相同边缘。相对熵分解和边缘相容性分别给
-\[
- I(W;\mathcal D_j\mid V_t)=C_j-B_j,\qquad B_n-B_j\ge0\quad(n\ge j).
-\]
-第二式由相对熵链式法则得到。
-记知道 $V_t$ 的真实 Bayes 预测 KL 为 $\epsilon^V_{\log,d,k}$，因此
+$P_j,Q_j$ 包含相同的输入边缘。由相对熵分解和 Markov 链 $V_t-W-\mathcal D_j$，
+\begin{equation}\label{info:reference-identity}
+ I_{d,j}+J_j(t)=\frac p2\log(1/t)+C_j-B_j.
+\end{equation}
+参考分布的边缘相容性给 $B_n\ge B_j\ge0$。结合 $J_n(t)\ge0$，同一恒等式给
 \begin{equation}\label{alt:block-entropy}
- \sum_{k=j}^{n-1}\epsilon^V_{\log,d,k}\le C_n-C_j.
+ I_{d,n}\le\frac p2\log(1/t)+C_n,\qquad
+ I_{d,n}-I_{d,j}\le C_n-C_j+J_j(t).
 \end{equation}
 
 \subsection{交叉熵的非线性误差}
@@ -422,16 +395,8 @@ $(1+nt\lambda/\Delta)/(1+jt\lambda/\Delta)\le n/j$，即有
  H_n-H_j\le\overline H_n-\overline H_j+Cjt^2
  \le p\log(n/j)+Cjt^2.
 \]
-结合 \eqref{alt:block-entropy}--\eqref{alt:cross-entropy}，得到有限维样本块界
-\begin{equation}\label{alt:oracle-block}
- \sum_{k=j}^{n-1}\epsilon^V_{\log,d,k}
- \le\frac p2\log\frac nj+Cjt^2
-      +C\sqrt{pn t^{1+\delta}}+Cnt^{1+\delta}.
-\end{equation}
-
-同一参考分布也控制累计互信息。由链式法则及 $B_n\ge0$，
-$I_{d,n}\le I(W;V_t)+C_n$。再用 \eqref{alt:cross-entropy} 和
-$H_n\le\overline H_n$，得到
+由 \eqref{alt:block-entropy} 的第一式、\eqref{alt:cross-entropy}
+及 $H_n\le\overline H_n$，累计信息满足
 \begin{equation}\label{eq:sample-information-upper}\begin{aligned}
  \frac{I_{d,n}}p\le{}&\frac12\log\frac1t
   +\frac1{2p}\E\log\det(I_p+ntA/\Delta)\\
@@ -496,30 +461,10 @@ $r\downarrow0$、$s\downarrow0$，得到
 \liminf_{\alpha\to\infty}\alpha\liminf_d\epsilon_{\log,d}(\alpha)\ge c/2.
 \end{equation}
 
-\section{消去辅助观测并完成上界}
-定义 $J_j(t)=I(W;V_t\mid\mathcal D_j)$。给定数据独立抽后验样本 $W'$，
-用有限匹配族构造参考密度
-\[
- Q_{W'}^{\rm par}=\frac1{|\mathcal G_d|}\sum_{g\in\mathcal G_d}
- N(\sqrt{1-t}\,gW',tI_p).
-\]
-任一混合分量都被 $|\mathcal G_d|Q_{W'}^{\rm par}$ 支配，高斯 KL 公式给
-\[
- \KL\!\left(N(\sqrt{1-t}W,tI_p)\middle\|Q_{W'}^{\rm par}\right)
- \le\log|\mathcal G_d|+\frac{1-t}{2t}\min_g\|W-gW'\|^2.
-\]
-相对熵分解及 $W'$ 的后验条件独立性因此给
-\begin{equation}\label{alt:oracle-cost}
- J_j(t)\le\log|\mathcal G_d|+\frac{p r_{d,j}}{2t}.
-\end{equation}
-这里最优标签只用于上界，未提供给学习者。
-
-由 Markov 链 $V_t-W-\mathcal D_n$ 和互信息链式法则，
-\[
- \sum_{k=j}^{n-1}\epsilon_{\log,d,k}
- =\sum_{k=j}^{n-1}\epsilon^V_{\log,d,k}+J_j(t)-J_n(t).
-\]
-风险递减、$J_n(t)\ge0$ 及 \eqref{alt:oracle-block}--\eqref{alt:oracle-cost} 给
+\section{预测 KL 上界}
+由风险递减，$(n-j)\epsilon_{\log,d,n}\le I_{d,n}-I_{d,j}$。
+把 \eqref{alt:oracle-cost} 代入 \eqref{alt:block-entropy} 的第二式，
+再用交叉熵和行列式的估计，得到
 \begin{equation}\label{alt:full-block}\begin{aligned}
  (n-j)\epsilon_{\log,d,n}\le{}&
  \log|\mathcal G_d|+\frac{p r_{d,j}}{2t}+\frac p2\log\frac nj\\
@@ -554,17 +499,12 @@ $\vartheta^{-1}\log(1/(1-\vartheta))\to1$ 得
           c/2-\alpha\liminf_d\epsilon_{\log,d}(\alpha)\},
 \]
 即证明原定理。没有交换维度与样本比极限，也没有对累计信息渐近式求导。
-
 \appendix
 \section{固定深度网络的解析估计及分部积分的定义域}\label{an:appendix}\label{an:section}\label{app:local}
-\newthought*{固定深度与比例宽度下，各阶矩和局部导数具有维数一致的控制。}
-所有期望均针对独立标准高斯输入和权重；本节不把后验双副本当成高斯耦合。固定深度 $L$，令 $k_0=d$，且 $cd\le k_\ell\le Cd$，其中 $0<c<C<\infty$ 固定。采用
-\[
- u^{(\ell)}=W^{(\ell)} h^{(\ell-1)}/\sqrt{k_{\ell-1}},\quad
- h^{(\ell)}=\sigma_\ell(u^{(\ell)}),\quad h^{(0)}=X,\qquad
- F=k_L^{-1/2}\boldsymbol1^Th^{(L)}.
-\]
-每层激活固定、全局 Lipschitz，且 $\mathbb E\sigma_\ell(G)=0$、$\mathbb E\sigma_\ell(G)^2=1$。常数可以依赖 $L,c,C$、激活以及指定的有限阶矩，不能依赖 $d$。后文 OU 梯度变化与余项估计的常数和维数阈值均独立于其扰动参数。任何矩阶均先固定，再选择维数阈值。
+沿用模型中的 $h^{(\ell)},F$，记 $u^{(\ell)}=W^{(\ell)}h^{(\ell-1)}/\sqrt{k_{\ell-1}}$。
+固定深度 $L$，且 $cd\le k_\ell\le Cd$；期望均对独立高斯权重和输入。
+本节矩估计也允许各层使用不同的固定、中心化单位方差的 Lipschitz 激活。
+各矩阶先固定，常数可依赖激活、深度和宽比；OU 估计的常数及维数阈值对扰动参数一致。
 
 \subsection{输出和隐藏范数的任意固定阶矩}
 \begin{lemma}\label{an:moments}
@@ -577,39 +517,37 @@ $\vartheta^{-1}\log(1/(1-\vartheta))\to1$ 得
 这些结论适用于混合使用上述激活的固定层数网络。此外，每个固定 $r>0$ 有 $\sup_{\ell,i,d}\mathbb E|h_i^{(\ell)}|^r<\infty$；任意固定个特征的固定次幂乘积具有一致有界的绝对期望，允许这些特征来自不同层或不同输入副本，只须各副本具有规定的高斯边缘分布。
 \end{lemma}
 \begin{proof}
-写 $b(q)=\mathbb E\sigma(\sqrt qG)$ 和 $v(q)=\mathbb E\sigma(\sqrt qG)^2$。由 $|\sigma(z)|\le M|z|+M_0$，对全部 $q\ge0$ 有
-\[
- \mathbb E|\sigma(\sqrt qG)|^s\le C_s(1+q^{s/2}),\quad
- |b(q)|\le C|q-1|,\quad |v(q)-1|\le C|q-1|. \tag{A1}\label{an:scalar}
-\]
-最后一式来自差平方公式及
-$|\sqrt q-1|(\sqrt q+1)=|q-1|$；前一式用 $b(1)=0$。这些是全局估计，不剔除坏方差事件。
+写 $b(q)=\E\sigma(\sqrt qG)$、$v(q)=\E\sigma(\sqrt qG)^2$。
+Lipschitz 性、中心化及单位方差给出全局界
+\begin{equation}\label{an:scalar}
+ \E|\sigma(\sqrt qG)|^s\le C_s(1+q^{s/2}),\qquad
+ |b(q)|+|v(q)-1|\le C|q-1|\quad(q\ge0).
+\end{equation}
+这里用 $|\sigma(z)|\le C(1+|z|)$ 及
+$|\sqrt q-1|(\sqrt q+1)=|q-1|$。
+若 $Y_i$ 给定 $\mathcal F$ 后独立且中心化，则
+\begin{equation}\label{an:sample}
+ \E\left[\left|N^{-1}\sum_iY_i\right|^{2m}\middle|\mathcal F\right]
+ \le C_mN^{-m}\max_i\E[|Y_i|^{2m}\mid\mathcal F].
+\end{equation}
+证明只需展开 $2m$ 次幂：单次出现的指标使该项为零，其余项至多有 $m$ 个指标，
+共 $O_m(N^m)$ 项，每项由 H\"older 控制。
 
-先记录样本均值的直接矩展开。条件独立、条件中心化的 $Y_i$ 若满足
-$\mathbb E[|Y_i|^s\mid\mathcal F]\le C_s(1+q^{as})$，$2\le s\le2m$，则
+给定前层，本层行输出独立同分布为 $\sigma(\sqrt{q_{\ell-1}}G)$。
+先由 Jensen 与式~\eqref{an:scalar} 归纳得 $\E q_\ell^{2m}\le C_m$；
+再对 $Y_i=(h_i^{(\ell)})^2-v_\ell(q_{\ell-1})$ 用式~\eqref{an:sample}，得到
 \[
- \mathbb E\left[\left|N^{-1}\sum_iY_i\right|^{2m}\middle|\mathcal F\right]
- \le C_mN^{-m}(1+q^{2ma}). \tag{A2}\label{an:sample}
+ \E|q_\ell-1|^{2m}\le C_md^{-m}+C_m\E|q_{\ell-1}-1|^{2m}=O(d^{-m}).
 \]
-事实上，展开 $2m$ 次幂；含只出现一次的指标的项为零。余项至多有 $m$ 个不同指标，有 $j$ 个不同指标的项数至多 $C_mN^j$；其条件矩绝对值至多 $C_m(1+q^{2ma})$。除以 $N^{2m}$ 即得所述界。
-
-给定前层，当前层的各预激活恰为独立 $N(0,q_{\ell-1})$。Jensen 不等式先给出
-$\mathbb E[q_\ell^{2m}\mid\mathcal F_{\ell-1}]\le C_m(1+q_{\ell-1}^{2m})$，故固定深度归纳得到正矩界。对
-$Y_i=(h_i^{(\ell)})^2-v_\ell(q_{\ell-1})$
-使用 \eqref{an:sample}，再使用 \eqref{an:scalar}，得到
+初值 $q_0=d^{-1}\sum_iX_i^2$ 由同一展开给出。
+真实全一读出保留其条件均值：
 \[
- \mathbb E|q_\ell-1|^{2m}\le C_md^{-m}
-       +C_m\mathbb E|q_{\ell-1}-1|^{2m}.
-\]
-初值由 $q_0=d^{-1}\sum_iX_i^2$ 和同一矩展开给出 $O(d^{-m})$，故所有隐藏层均成立。
-最后，条件于前 $L-1$ 层，精确分解为
-\[
- F=\sqrt{k_L}\,b_L(q_{L-1})+
+ F=\sqrt{k_L}b_L(q_{L-1})+
  k_L^{-1/2}\sum_i\{h_i^{(L)}-b_L(q_{L-1})\}.
 \]
-第二项的 $2m$ 阶条件矩由 \eqref{an:sample} 控制为 $C_m(1+q_{L-1}^m)$；第一项的 $2m$ 阶矩不超过
-$C_mk_L^m\mathbb E|q_{L-1}-1|^{2m}=O(1)$。
-取 $2m\ge r$ 并用矩的单调性完成输出矩证明。单个特征的矩由 \eqref{an:scalar} 对前层条件化得到；固定乘积的矩由 H\"older 不等式得到，不需各因子独立。特别地，全一读出的条件均值没有被丢弃。
+第一项的 $2m$ 阶矩至多 $C_mk_L^m\E|q_{L-1}-1|^{2m}=O(1)$，
+第二项由式~\eqref{an:sample} 及正矩界控制。
+取 $2m\ge r$ 得全部所需阶数；单个特征矩由条件行估计给出，固定乘积矩由 H\"older 得到。
 \end{proof}
 
 \subsection{梯度与 Hessian 的矩界}
@@ -642,34 +580,24 @@ $C_mk_L^m\mathbb E|q_{L-1}-1|^{2m}=O(1)$。
 \]
 网络在每个有限维空间局部 Lipschitz；链式公式在可微点成立，并代表弱导数。亦可逐层平滑激活，用上述界和弱紧致性识别同一弱梯度。
 
-写 $J_{u,\ell},J_{h,\ell}$ 为对全部权重的 Jacobian。由
+记 $J_{u,\ell},J_{h,\ell}$ 为对全部权重的 Jacobian。
+对前向递推求一次导数，逐层得二者算子范数均不超过 $P$。
+二阶链式法则中，每层的激活项为
+$J_{u,\ell}^T\operatorname{diag}(\beta_\ell\odot\sigma''_\ell)J_{u,\ell}$；
+权重与前层特征的混合项及其转置各有 Hilbert--Schmidt 范数
+$k_{\ell-1}^{-1/2}\|\lambda_\ell\|\|J_{h,\ell-1}\|_{\rm HS}$。
+因此
 \[
- \|J_{u,\ell}\|_{\rm op}\le B_\ell\|J_{h,\ell-1}\|_{\rm op}
-                  +\|h^{(\ell-1)}\|/\sqrt{k_{\ell-1}},\qquad
- \|J_{h,\ell}\|_{\rm op}\le M\|J_{u,\ell}\|_{\rm op},
+ \|\nabla_W^2F\|_{\rm HS}
+ \le\sum_\ell\left(
+ \|\sigma''_\ell\|_\infty\|\beta_\ell\|\|J_{u,\ell}\|_{\rm op}^2
+ +\frac{2\|\lambda_\ell\|\|J_{h,\ell-1}\|_{\rm HS}}{\sqrt{k_{\ell-1}}}\right)
+ \le P.
 \]
-二者算子范数均不超过 $P$。计算图的二阶链式法则把输出 Hessian 精确写为各层的两类项之和。激活项为
-\[
- J_{u,\ell}^T\operatorname{diag}(\beta_\ell\odot\sigma_\ell''(u^{(\ell)}))J_{u,\ell};
-\]
-它的 Hilbert--Schmidt 范数不超过
-$\|J_{u,\ell}\|_{\rm op}^2\|\sigma_\ell''\|_\infty\|\beta_\ell\|$。
-混合项的双线性形式为
-\[
- k_{\ell-1}^{-1/2}\lambda_\ell^T
- \{U^{(\ell)}Dh^{(\ell-1)}[V]+V^{(\ell)}Dh^{(\ell-1)}[U]\}.
-\]
-其中一个方向的 Hilbert--Schmidt 范数平方恰为
-$\|\lambda_\ell\|^2\|J_{h,\ell-1}\|_{\rm HS}^2/k_{\ell-1}$，
-不超过 $\|\lambda_\ell\|^2\|J_{h,\ell-1}\|_{\rm op}^2$，因为该 Jacobian 的秩不超过 $k_{\ell-1}$。转置方向同理。对固定层数求和，再用 $P$ 的矩界即可。
+末步用 $\operatorname{rank}J_{h,\ell-1}\le k_{\ell-1}$；取二阶矩即得结论。
 \end{proof}
 \subsection{分段线性激活的负阶矩与符号变化}
-考虑固定实数 $a,b$ 的激活
-\[
- \sigma(z)=az+b(|z|-c_0),\qquad c_0=\sqrt{2/\pi},
- \qquad a^2+b^2(1-2/\pi)=1. \tag{A5}\label{an:pl}
-\]
-当 $b=0$，这是已被激活类排除的线性函数 $\sigma(z)=\pm z$。以下取 $b\ne0$，但不要求 $a\ne0$，也不要求 $a+b$ 和 $a-b$ 均非零。因此偶函数支和一侧斜率为零的 ReLU 支均被包含。常数可以依赖固定的 $(a,b)$；不声称当 $b\to0$ 时一致。
+本小节取式~\eqref{eq:pl} 的激活，特别是 $b\ne0$；允许 $a=0$ 或 $a\pm b=0$。
 
 \begin{lemma}\label{an:negative}
 存在 $\eta_0,C_0>0$，使得对全部 $r\ge0$、$0<\eta\le\eta_0$，
@@ -680,21 +608,21 @@ $\|\lambda_\ell\|^2\|J_{h,\ell-1}\|_{\rm HS}^2/k_{\ell-1}$，
 $\sup_{r\ge0,N\ge N_0(p)}\mathbb E Q^{-p}<\infty$。
 \end{lemma}
 \begin{proof}
-记 $c=bc_0\ne0$。在两条半轴上，激活分别为 $s_\pm z-c$，其中 $s_\pm=a\pm b$。若斜率为零，该半轴取恒值 $-c$，当 $\sqrt\eta<|c|/2$ 时不会贡献小球事件。非零斜率的半轴上，小球事件属于以非零根 $c/s_\pm$ 为中心、长度 $2\sqrt\eta/|s_\pm|$ 的区间；无合法半轴根时直接舍去。缩小 $\eta_0$ 后，每个区间与零有固定正距离。对 $|z|\ge\delta>0$，密度 $r^{-1}\phi(z/r)$ 在全部 $r>0$ 上一致有界，因为令 $v=|z|/r$ 后它等于 $v\phi(v)/|z|$。$r=0$ 时事件为空。因此得小球界。
-
-事件 $Q\le\eta$ 要求至少 $N/2$ 项不超过 $2\eta$；条件独立和子集计数给出
-$\mathbb P(Q\le\eta)\le(C_1\eta^{1/4})^N$。
-选更小的 $\eta_0$ 使 $C_1\eta_0^{1/4}<1/2$，则
+置 $c=bc_0\ne0$。两半轴上 $\sigma(z)=(a\pm b)z-c$。
+零斜率半轴在 $\sqrt\eta<|c|/2$ 时不贡献事件；其他半轴的小球集合是
+长度 $O(\sqrt\eta)$、与零保持固定距离的区间。
+而 $r^{-1}\phi(z/r)=|z|^{-1}v\phi(v)$，$v=|z|/r$，在这些区间上对所有 $r>0$ 一致有界。
+$r=0$ 时事件为空，故小球界成立。
+若 $Q\le\eta$，至少半数样本的平方不超过 $2\eta$；独立性与子集计数给
+$\Pr(Q\le\eta)\le(C_1\eta^{1/4})^N$。
+缩小 $\eta_0$ 使 $C_1\eta_0^{1/4}\le1/2$，积分尾概率得
 \[
- \mathbb E Q^{-p}\le\eta_0^{-p}
-       +pC_1^N\int_0^{\eta_0}s^{N/4-p-1}\,ds
- \le\eta_0^{-p}+\frac{p\eta_0^{-p}2^{-N}}{N/4-p}
+ \E Q^{-p}\le\eta_0^{-p}+
+ \frac{p\eta_0^{-p}2^{-N}}{N/4-p}\qquad(N>4p).
 \]
-对 $N>4p$ 一致有界。逐层条件化立即证明全部隐藏范数及删去一个坐标后的平均平方范数具有固定阶负矩。输入范数的负矩则由
-\[
- \mathbb E q_0^{-p}=\prod_{j=1}^p\frac d{d-2j}\le2^p\quad(d\ge4p)
-\]
-给出，此处先取整数 $p$，其余阶用矩单调性。
+逐层条件化得到隐藏范数及删去一行后的平均平方范数的全部固定阶负矩。
+输入端对整数 $p$ 有 $\E q_0^{-p}=\prod_{j=1}^p d/(d-2j)\le2^p$（$d\ge4p$）；
+其他阶数用矩单调性。
 \end{proof}
 
 \begin{lemma}[带权符号变化估计]\label{an:weighted-sign}
@@ -940,7 +868,7 @@ $\|E_{\rm new}(e_a\text{ 于 }p,\cdot)\|_{\rm HS}
 高斯连续乘积的坐标估计。
 \hfill$\square$
 
-\paragraph{高斯一元例外与原树实例。}
+\paragraph{线性路径上的高斯矩阵乘积。}
 令 $A_\ell$ 为独立、按输入宽度平方根归一化的高斯矩阵。
 任意固定连续积 $P=A_b\cdots A_a$ 满足
 \begin{equation}
@@ -964,7 +892,7 @@ $\|Qe_j\|^2/n_{b-1}\leq C/d$ 的高斯变量，尾界与有限并合即得第二
 不同深度均可停止展开，但根到叶的内部路径仍只含原网络矩阵。
 以下坐标切片估计始终用于这样重建的原系数张量。
 
-\paragraph{引理（线性槽的精确压缩）。}
+\paragraph{引理（线性路径的精确求和）。}
 \label{fp:core-linear}
 令底层行向量为 $b_j$，父层矩阵为 $U=(u_{aj})$，并设
 $z_a=\sum_ju_{aj}b_j$。一个父节点有 $t$ 个线性子槽以及次数
@@ -1045,59 +973,56 @@ $\|g\|\geq c\sqrt d$ 的高斯尾界，给均匀球面向量 $u=g/\|g\|$
 在该层引入这些模式时先估计这一部分，再将误差通过有界的展开算子传递，最终误差仍为 $o(1)$。
 这里只删除不同原节点的索引恰取相同值的项；同一父索引的确定性复制仍须保留。
 
-\paragraph{双父收缩与二阶非对角纤维。}
+\paragraph{原始系数的矩与坐标界。}
+\label{fp:core-raw-collision-expectation}
+设 $C_R$ 为固定深度、固定次数、零常数高斯多项式网络的原始 $R$ 阶系数，
+允许保留有序因子、对称化及固定有限个展开项的和。对每个固定 $0<p<\infty$，
+$\sup_d\mathbb E\|C_R\|_{\rm HS}^p<\infty$。
+若全部索引由同一原高斯层的列索引产生（不含父索引的确定性复制），宽度为 $k\asymp d$，则对任意固定 $M$，
+以失败概率 $O(d^{-M})$ 同时有
+\begin{equation}\label{fp:core-coordinate-bounds}
+ \max_{i_1,\ldots,i_R\ \text{互异}}|(C_R)_{i_1\cdots i_R}|
+ \le L_d k^{-R/2},\qquad
+ \|\operatorname{Coll}_R C_R\|_{\rm HS}^2\le L_d/d\quad(R\ge3),
+\end{equation}
+其中 $L_d$ 为固定对数幂；$R\ge3$ 时还有 $\mathbb E\|\operatorname{Coll}_R C_R\|_{\rm HS}^2=o(1)$。
+为证矩界，将原展开算子的范数相乘，再用归一化高斯矩阵算子范数的固定阶矩和 H\"older 不等式，
+不需乘积中各因子独立。列置换不变性使互异坐标的二阶矩相同，故每个至多
+$C/(k)_R=O(k^{-R})$。每个坐标是固定次数 $D_0$ 的高斯多项式，
+$\|Z\|_u\le(u-1)^{D_0/2}\|Z\|_2$；取 $u=C_M\log d$，在 $e\|Z\|_u$ 处用 Markov
+并对至多 $k^R$ 个坐标作并集界，即得第一界。
+第二界由同层旋转引理~\ref{fp:core-fresh}及式~\eqref{fp:core-collision-bound}应用于每个有序展开项得到；
+固定有限个排列与展开项的和不改变阶数。矩界及 Cauchy--Schwarz 给
+$\mathbb E\|\operatorname{Coll}_R C_R\|^2\le L_d/d+
+(\mathbb E\|C_R\|^4)^{1/2}O(d^{-M/2})=o(1)$。
+这里只控制原始系数，尚未施加依赖两个网络的外部映射。
+
+\paragraph{两个父索引的收缩与二阶非对角项。}
 \label{fp:core-two-parent}
 在一个未加掩码的原始切口中，设不同父模式 $p,q$ 的所选线性槽与教师行
 收缩后给出 $\eta_i,\zeta_i$，其 $\ell^2$ 范数有界。模式 $p$ 是本层引入的模式，
 且删去所选槽后仍有非空残余；所有完整残余家族均为有界算子。
-若切口总模式数 $R\ge3$，则完整剩余源张量 $S_i$ 满足
-\[
- \|S_i\|_{\rm HS}\le C\rho_d.
-\]
-令 $B_ie_b=\zeta_{ib}f_b$，其中 $f_b$ 是第二个源索引删除所选槽后的完整
+若总模式数 $R\ge3$，完整剩余源张量 $S_i$ 满足 $\|S_i\|_{\rm HS}\le C\rho_d$。
+事实上，令 $B_ie_b=\zeta_{ib}f_b$，其中 $f_b$ 是第二个源索引删除所选槽后的完整
 剩余特征；无剩余槽时取 $f_b=1$。逐点有
 $\|B_i\|_{\rm HS}^2=\sum_b|\zeta_{ib}|^2\|f_b\|^2\le C$。
 将原始切片 $E(e_a,\cdot)$ 看作从 $q$ 索引到其余索引的算子 $T_a$。
-因 $R\ge3$，式~\eqref{fp:core-fresh-slice}给 $\|T_a\|_{\rm op}\le\rho_d$，所以
-$\|T_aB_i^*\|_{\rm HS}\le\|T_a\|_{\rm op}\|B_i\|_{\rm HS}\le C\rho_d$。
-保留第一个索引 $a$，乘 $\eta_{ia}$ 后平方求和，再施加完整剩余特征，
-得到 $\|S_i\|_{\rm HS}\le C\rho_d$。最终教师切片和至多
-$C\sqrt d\|C\|$，故配对为 $O(\sqrt d\rho_d)\|C\|=o(1)$。
-这些界不要求 $B_i$ 与网络独立；两个所选索引须对应不同原始父节点。
-二阶切口只需另用非对角元估计。两个索引属于同一原网络层的二阶系数张量 $D$ 是固定次数高斯
-多项式，且 $\mathbb E\|D\|_{\rm HS}^2\le C$；置换不变性给
-$\mathbb E|D_{ab}|^2\le C/d^2$（$a\ne b$）。固定次数高斯
-超可积性给 $\|D_{ab}\|_{L^p}\le(p-1)^{D_0/2}\|D_{ab}\|_{L^2}$。
-取 $p=C_M\log d$ 并对 $O(d^2)$ 个元并合，得到
-$\max_{a\ne b}|D_{ab}|\le L_d/d$，失败概率 $O(d^{-M})$。
-所需二阶矩由展开算子界及原高斯矩阵算子范数的固定阶矩得到。
-该结论不控制二阶对角，也不控制二阶坐标--向量切片。
+式~\eqref{fp:core-fresh-slice}给 $\|T_a\|_{\rm op}\le\rho_d$，故
+$\|T_aB_i^*\|_{\rm HS}\le C\rho_d$。
+保留第一个索引 $a$，乘 $\eta_{ia}$ 后平方求和，再施加完整剩余特征，即得所需界。
+这些估计逐点成立，不要求 $B_i$ 与网络独立。
 
-双索引收缩要求两个不同原节点的索引；同一父节点产生的两个后代因子不满足该条件。
-总模式数为二时，式~\eqref{fp:core-fresh-slice} 中的第二个非平凡矩阵化不存在。
-若两个索引属于同一原网络层，仅其非对角部分使用上面的非对角元估计，对角部分另行处理。
-若两个索引来自不同层，则不能使用这一非对角元估计；后文通过保留根索引处理所需的这类二模式项。
-
-\paragraph{推论（原始高阶碰撞的期望控制）。}
-\label{fp:core-raw-collision-expectation}
-设 $C_R$ 是固定深度、固定次数、零常数项高斯多项式网络的原始
-齐次系数，$R\geq3$，允许固定有限个展开项的和。则每个固定 $p<\infty$
-均有 $\sup_d\mathbb E\|C_R\|_{\mathrm{HS}}^p<\infty$，并且
-$\mathbb E\|\operatorname{Coll}_R C_R\|_{\mathrm{HS}}^2=o(1)$。
-为证矩界，把每个展开项写成有限个计算树展开算子及槽排列的和。其范数至多
-固定常数乘有限个原高斯矩阵算子范数的固定幂；归一化高斯
-矩阵在固定宽比下有维数一致的任意固定阶矩。因此 H\"older 不等式给所述
-界，不需层间乘积各因子独立。对索引属于同一原网络层的系数张量，首个输入高斯层赋予
-正交不变性，同层旋转引理~\ref{fp:core-fresh}及碰撞推论给任意 $M$ 的事件 $\Omega_M$，其补集
-概率 $O(d^{-M})$，而事件内碰撞平方范数至多 $L_d/d$。故
+若 $R=2$、两个索引属于同一原网络层，且删除所选槽后两个模式均有非空残余，式~\eqref{fp:core-coordinate-bounds}给
+$\max_{a\ne b}|D_{ab}|\le L_d/d$；保留两标签后施加完整特征映射，非对角部分满足
 \[
- \mathbb E\|\operatorname{Coll}_R C_R\|^2
- \leq L_d/d+
- (\mathbb E\|C_R\|^4)^{1/2}\mathbb P(\Omega_M^c)^{1/2}=o(1).
+ \|S_i^{\rm off}\|\le C\Big(\sum_{a\ne b}|D_{ab}\eta_{ia}\zeta_{ib}|^2\Big)^{1/2}
+ \le CL_d/d.
 \]
-对称化只含固定有限个排列，有限个展开项的和由三角不等式处理。
+两种界与教师切片和 $C\sqrt d\|C\|$ 配对均为 $o(1)\|C\|$。
+该二阶结论不控制对角或坐标--向量切片；不同层的两个索引亦不适用，须保留根索引另行处理。
+同一父索引的确定性复制不是两个不同父节点，不能使用本估计。
 
-\subsection{完整余张量的统一局部收缩}
+\subsection{保留剩余因子的局部收缩估计}
 \label{fp:core-residual-section}
 
 \paragraph{未收缩因子的矩阵化界。}\label{fp:core-residual-flat}
@@ -1175,47 +1100,17 @@ $\sum_i\|C(e_i,\cdot)\|\le C\sqrt d\|C\|$，即得第二、三项。
 
 二阶源矩阵若先限制到非对角，可分别处理 $D$ 与 $\operatorname{diag}D$，
 因为后者的算子范数及 Hilbert 范数不增；这里没有将其对角宣称为小量。
-其他掩码不能据此处理。系数只有一个索引且只剩一个因子的情形，在下段通过保留根索引处理。
-
-\paragraph{保留根索引的二阶情形。}
-\label{fp:core-spectator}
-若系数只有一个索引，且除指定收缩因子外只剩一个因子，前一引理的第三项不适用。
-此时从 $E_{ab}=d_aU_{ab}$ 开始，保留索引 $a$，只展开后代索引。
-由展开保持范数和切片界的引理，重建后的系数张量至少有两个模式，
-所有非平凡矩阵化均为 $O(\delta_d)$；根处的收缩因子作为外部的单因子映射保留。
-若后代具有按原父索引分开表示的完整特征，可用引理~\ref{fp:core-hybrid-Rge2}；
-若本次展开涉及两个不同的后代索引，加上 $a$ 后总模式数至少三，
-可用引理~\ref{fp:core-fresh}。整个过程中不对 $a$ 求迹。
-相应的因子分解将在第~\ref{fp:history} 节中构造。
+其他掩码不能据此处理。系数只有一个索引且仅剩一个其他因子时，须用第~\ref{fp:permanent-mark} 节保留根索引的论证。
 
 \section{实际激活的输入混沌投影与多项式近似}
 \label{fp:actual-section}\label{app:closure}
 
-本节证明实际网络的第 $N$ 阶输入混沌可由有限个多项式网络的系数逼近。
-所有误差先在单个网络的先验下估计，最后再用于任意先验边缘耦合。令 $k_0=d$，$L$ 固定，且
-$c d\leq k_\ell\leq C d$。写 $A_\ell=W^{(\ell)}/\sqrt{k_{\ell-1}}$，
-$W^{(\ell)}$ 的元素独立服从 $N(0,1)$，各层独立；$X\sim N(0,I_d)$ 独立于权重。
-定义
-\[
- h^{(0)}=X,\quad h^{(\ell)}=\sigma(A_\ell h^{(\ell-1)}),\quad
- q_\ell=k_\ell^{-1}\|h^{(\ell)}\|^2,\qquad
- F_L:=F_{\theta(W)}^{(L)}=k_L^{-1/2}\sum_i h_i^{(L)}.
-\]
-激活满足 $\mathbb E\sigma(G)=0$、$\mathbb E\sigma(G)^2=1$，并取以下之一：
-有界光滑奇函数（每个固定阶导数有界），或
-\begin{equation}\label{fp:actual-pl}
- \sigma(z)=a z+b(|z|-u),\qquad u=\sqrt{2/\pi},\qquad
- a^2+b^2(1-u^2)=1.
-\end{equation}
-记 $\psi_j=\mathrm{He}_j/\sqrt{j!}$，
-$a_j=\mathbb E[\sigma(G)\psi_j(G)]$，
-$b_j=\mathbb E[(\sigma(G)^2-1)\psi_j(G)]$。
-$\Pi_N$ 表示输入 $X$ 的第 $N$ 阶正交混沌投影；对称张量约定为
-\begin{equation}\label{fp:actual-isometry}
- \mathbb E_X I_N(T)I_N(S)=N!\langle T,S\rangle.
-\end{equation}
-特别地，下文的 ``形式次数为 $N$ 的系数再取 $I_N$''，不等于先计算整个
-多项式网络的函数值再作 $\Pi_N$。后者还包含更高形式次数经高斯收缩得到的第 $N$ 阶项。
+本节沿用模型与 $\Pi_N,I_N$ 的定义，令 $A_\ell=W^{(\ell)}/\sqrt{k_{\ell-1}}$、
+$F_L=F_{\theta(W)}^{(L)}$、$u=c_0=\sqrt{2/\pi}$，并记
+$b_j=\E[(\sigma(G)^2-1)\psi_j(G)]$。
+目标是在单网络先验下，用有限个多项式网络的系数逼近 $\Pi_NF_L$。
+下文始终先取形式 $N$ 次系数，再施加 $I_N$；这与先计算整个多项式网络再投影不同，
+后者还包含更高形式次数经高斯收缩得到的第 $N$ 阶项。
 
 \paragraph{局部矩估计。}
 以下估计均只涉及单网络边缘分布。
@@ -1447,48 +1342,42 @@ $\operatorname{tr}H_t=\|C_t\|_F^2/\sqrt{k_t}$，均值为 $\sqrt{k_t}$，
 得到\eqref{fp:actual-diag}；辅助标记取系数不改变证明。
 
 \begin{lemma}[去掉索引互异限制]\label{fp:actual-restoration}
-对任意固定、常数项为零的输出层多项式 $A$，有
-\begin{equation}\label{fp:actual-triangular}
- J_{t,N}[A;p]=R_{t,N}[A;p]
- -\sum_{s=1}^{t-1}\lambda_{t,s}(A)\,
- J_{s,N}[p_s^2;p_{<s}]+o_{L^2}(1),\qquad
- \lambda_{t,s}(A)=[A]_2\prod_{j=s+1}^{t-1}[p_j]_1^2\sqrt{k_t/k_s}.
-\end{equation}
-其中 $[A]_2$ 和 $[p_j]_1$ 分别表示二次项和一次项的系数。
-所有确定性系数在固定宽比下有界。
-\end{lemma}
-\begin{proof}
-从第 $t-1$ 层开始向下，依次去掉 $J_{t,N}[A;p]$ 中的索引互异限制；
-新产生的修正项暂时保留其下层限制。处理第 $s$ 层时，其上方已经没有索引限制，
-故可对上方多项式的完整系数使用\eqref{fp:actual-raw-interface} 和
-\eqref{fp:actual-diag}。一次项没有重复索引，高于二次的重复索引项为 $o(1)$。
-二次项的确定对角部分代入 $y_i=p_s(z_i)$ 后为
-$\lambda_{t,s}(A)k_s^{-1/2}\sum_i p_s(z_i)^2$。
-同一索引对应的两个因子在此精确相乘。第 $s$ 层以下的索引互异限制仍在，
-所以这项正是 $\lambda_{t,s}(A)J_{s,N}[p_s^2;p_{<s}]$。
-把各层补入的项移到等式右侧，得到\eqref{fp:actual-triangular}中的负号。
-
-代入下层多项式所用的张量映射，其范数至多为固定个 $\|A_j\|_{\rm op}$
-的固定次幂；删除坐标项和对称化均不增加 Hilbert 范数。固定次数高斯
-多项式的矩等价、H\"older 不等式与\eqref{fp:actual-isometry} 因而保证
-上述有限步中的误差之和仍为 $o_{L^2}(1)$。每一步都只对没有索引限制的
-上方多项式系数使用重复索引估计。
-\end{proof}
-
-\paragraph{二次修正项的消去。}
-式~\eqref{fp:actual-triangular}中的系数满足
-\[
- \lambda_{t,s}(A)=\lambda_{t,t-1}(A)\lambda_{t-1,s}(p_{t-1}^2)
- \quad(s<t-1),\qquad
- [p_{t-1}^2]_2=[p_{t-1}]_1^2.
-\]
-把输出层多项式为 $p_{t-1}^2$ 的深度 $t-1$ 网络代入同一恒等式，即得
+记 $[p]_r$ 为 $z^r$ 的系数。对固定、常数项为零的多项式
+$A,p_1,\ldots,p_{t-1}$，$t\ge2$，有
 \begin{equation}\label{fp:actual-restoration-exact}
  J_{t,N}[A;p]=R_{t,N}[A;p]
  -[A]_2\sqrt{k_t/k_{t-1}}\,
  R_{t-1,N}[p_{t-1}^2;p_{<t-1}]+o_{L^2}(1).
 \end{equation}
-所有深度小于 $t-1$ 的修正项系数均精确抵消，只剩上式的一项；其余误差由前述张量映射估计控制。
+\end{lemma}
+\begin{proof}
+令 $\gamma=[A]_2\sqrt{k_t/k_{t-1}}$。在取形式 $N$ 次系数前，
+从完整多项式中减去 $\gamma k_{t-1}^{-1/2}\sum_i y_i y_i$，
+其中 $y$ 为第 $t-1$ 层的多项式输出；保留两个因子各自的索引。
+从第 $1$ 层开始向上，依次删除同层索引重复的项。
+
+处理第 $s$ 层时，上方尚未施加索引限制。
+若 $s<t-1$，减项等同于输出激活为 $p_{t-1}^2$ 的浅一层网络；
+上方两个完整多项式的确定二次对角系数由
+\eqref{fp:actual-diag} 给出，分别为
+\[
+ [A]_2\prod_{j=s+1}^{t-1}[p_j]_1^2\sqrt{k_t/k_s},
+ \qquad
+ \gamma[p_{t-1}^2]_2\prod_{j=s+1}^{t-2}[p_j]_1^2
+       \sqrt{k_{t-1}/k_s}.
+\]
+由于 $[p_{t-1}^2]_2=[p_{t-1}]_1^2$，二者相等；$s=t-1$ 时，减项
+恰好就是第一个多项式的确定二次对角部分。因此其差的二次对角为 $o_{L^2}(1)$；
+高于二次的重复索引项由\eqref{fp:actual-raw-interface} 分别为 $o_{L^2}(1)$，
+一次项则没有重复索引。
+
+两项共用同一个下层展开映射，故确定对角部分在代入前精确抵消。
+此映射的范数至多为有限个 $\|A_j\|_{\rm op}$ 的固定次幂；
+此前加入的坐标限制和对称化均为收缩。固定次数高斯多项式的矩等价、
+H\"older 不等式及\eqref{fp:actual-isometry} 保证每一步删除的误差仍为 $o_{L^2}(1)$。
+最后，第 $t-1$ 层的互异限制将减项完全删去，原多项式则成为 $J_{t,N}[A;p]$。
+有限步误差相加即得结论。
+\end{proof}
 
 对至多多项式增长的 $f$，高斯密度关于方差求导给
 $\frac{d}{dq}\mathbb E f(\sqrt qG)|_{q=1}
@@ -1523,17 +1412,8 @@ $E_t=\Pi_NF_t^\chi-R_{t,N}[P_N^2;P_N]$。
 $\mu'=0$，不需引入 $\chi$ 或 $E_t$。
 所有激活多项式均没有常数项；逐层代入不能降低形式次数，故可统一删去超过 $N$ 次的项。
 
-\paragraph{任意先验边缘耦合。}
-若 $(W,W')$ 的两个边缘均为网络高斯先验，且
-$\sup_d\mathbb E\|B(W)\|_2^2<\infty$，则
-\[
- \mathbb E|\langle B(W),\Pi_NF_{W'}-\mathcal Q_N(W')\rangle|
- \le(\mathbb E\|B(W)\|_2^2)^{1/2}
-      (\mathbb E\|\Pi_NF_{W'}-\mathcal Q_N(W')\|_2^2)^{1/2}=o(1).
-\]
-这里只用各自边缘的误差，不在耦合下额外假设层间独立。
-式~\eqref{fp:actual-U} 保留深度 $L$ 的完整多项式系数和每个较浅深度的 $U_N$ 修正项，
-下节将逐项比较它们与齐次网络的配对。
+以上误差均在单网络先验下以 $L^2$ 控制。下一节用 Cauchy--Schwarz 将其用于任意先验边缘耦合，
+并比较式~\eqref{fp:actual-U} 中的深层项和全部较浅 $U_N$ 修正项。
 
 \section{计算树展开项的逐层比较}\label{fp:history}\label{app:cuts}
 \newthought*{先固定单项式和因子配对，再对所有选择求和。}
@@ -1602,7 +1482,7 @@ $\sup_d\mathbb E\|B(W)\|_2^2<\infty$，则
 $\max|A_{ij}|\le\kappa_d$，从而 $\max|AM|\le K_d\kappa_d$，
 即使 $M$ 依赖两个网络也成立。
 
-\subsection{保留一个索引的二阶情形}\label{fp:permanent-mark}
+\subsection{保留一个索引的二阶情形}\label{fp:permanent-mark}\label{fp:core-spectator}
 \newthought*{先处理其余子树，最后收缩索引 $a$ 所在的路径。}
 考虑系数含两个索引的张量
 \begin{equation}\label{fp:marked-state}
@@ -1654,16 +1534,7 @@ $\max|A_{ij}|\le\kappa_d$，从而 $\max|AM|\le K_d\kappa_d$，
 若两者都不是单因子节点，则二者都在当前同一层展开：较高层收缩因子再次使用时已经不带其他因子，而较高层尚未处理的输出会额外保留一个索引，使总阶数至少为三。
 因此这里的 $D$ 是在施加下方特征映射之前、两个索引属于同一原网络层的二阶系数矩阵。
 
-对它的非对角部分，由置换对称性、有界 Hilbert 二阶矩和固定次数高斯超可积性，有
-\[
- \max_{a\ne b}|D_{ab}|\le K_d/d.
-\]
-保留两标签后，完整源余张量界为
-\[
- K_d\Bigl(\sum_{a\ne b}|\eta_{ia}\zeta_{ib}D_{ab}|^2\Bigr)^{1/2}
- \le K_d/d,
-\]
-与教师切片和配对即趋零。该论证只使用坐标/坐标估计，未使用一般二阶坐标/向量增益。
+非对角部分由双父收缩估计~\ref{fp:core-two-parent}的二阶情形控制，完整配对为 $o(1)$。
 
 对于对角，式~\eqref{fp:actual-diag} 的原始二次系数估计给出
 \begin{equation}\label{fp:coherent-diagonal}
@@ -1770,18 +1641,9 @@ $K\mathbb E\|\mathcal H_W-\mathcal H_V\|_{L^2_X}^2+o_d(1)$。
 
 \subsection{系数切片的范数界}
 
-式~\eqref{tg:frame} 控制以下两类张量的 Gram 矩阵。对单位行向量 $a_i$、$k=O(d)$，若最大自身相干度 $\eta=O(\sqrt{\log d/d})$，固定 $r$，则张量
-\[
- \operatorname{Sym}\bigotimes_i a_i^{\otimes m\nu_i},\quad |\nu|=r,
-\]
-以及少一个因子的张量
-\[
- \operatorname{Sym}\bigotimes_i a_i^{\otimes(m\nu_i-\mathbf1_{i=j})},
- \quad |\nu|=r,\quad \nu_j>0,
-\]
-各自满足同样的 Gram 矩阵上下界（不同的 $(\nu,j)$ 无重复）：其任意线性组合的范数平方与系数平方和在维数无关常数内等价。容许 $1/2\le\|a_i\|\le2$，只改变常数。充分的小扰动界为
-$K[\eta+\sum_{h=1}^r k^h\eta^{mh-2}]=o(1)$。
-上述范数均在全局对称张量空间中计算。
+第~\ref{tg:section} 节取 $w_i=a_i$、$q=r$。因 $m\ge5$、$k=O(d)$、
+$\eta=O(\sqrt{\log d/d})$，其扰动条件成立，故完整张量 $P_\nu$ 及删除一个因子的张量 $Z_{\nu,j}$
+两族均满足式~\eqref{tg:frame} 的维度无关 Gram 上下界；行长在 $[1/2,2]$ 时亦然。
 
 令 $B_{s,i}=\partial_iP_s$。在各层行范数、相干度和列平方和的通常高斯集中事件上，
 \begin{equation}\label{hm:derivative}
@@ -1803,39 +1665,31 @@ $K[\eta+\sum_{h=1}^r k^h\eta^{mh-2}]=o(1)$。
  a'/k_s\le(H_s)_{ii}\le b'/k_s.
 \end{equation}
 
-\subsection{稠密系数与坐标碰撞的控制}
-\newthought*{系数分散性控制依赖两网络的删除操作。}
-对任意行矩阵 $A$，置 $U_Ae_i=a_i^{\otimes m}$。由于
-$U_A=(A^T)^{\otimes m}J$，其中 $Je_i=e_i^{\otimes m}$ 为等距嵌入，
-$\|U_A\|_{\rm op}\le\|A\|_{\rm op}^m$。每次齐次代入为 $U_A$ 的张量幂再接收缩映射 $\operatorname{Sym}$。从 $\|C_L\|=1$ 递推，$\|C_s\|$ 被有限个归一化高斯矩阵算子范数的固定幂乘积控制。高斯矩阵算子范数的固定阶矩有一致上界，故
+\subsection{最大系数与重复索引项的控制}
+\newthought*{用最大系数界控制删除少量行的误差。}
+对行矩阵 $A$ 定义 $U_Ae_i=a_i^{\otimes m}$。由
+$U_A=(A^T)^{\otimes m}J$、$Je_i=e_i^{\otimes m}$，有 $\|U_A\|_{\rm op}\le\|A\|_{\rm op}^m$。
+对 $s<L$，$C_s$ 是原下游齐次网络的系数，阶数 $q_s=m^{L-s}\ge5$；
+可直接应用原始系数界~\ref{fp:core-raw-collision-expectation}。终层 $C_L=k_L^{-1/2}{\bf1}$ 单独处理。
+因此对所有 $s$ 和固定 $0<u<\infty$，
 \begin{equation}\label{hm:moments}
- \sup_d\mathbb E\|C_s\|^u<\infty\quad(0<u<\infty).
+ \sup_d\mathbb E\|C_s\|^u<\infty.
 \end{equation}
-平方自由单项式是每个变量次数至多为一的单项式；记 $\mathrm{SF}$ 为只保留这些单项式的正交投影。对 $Y_I=\prod_{i\in I}Y_i$，$|I|=q_s$，写其系数为 $p_I$，置 $c_I=p_I/\sqrt{q_s!}$。式 \eqref{hm:coeff-norm} 表明 $\sum_Ic_I^2$ 为平方自由部分的张量范数平方。对 $s<L$，矩阵 $W^{(s+1)}$ 的列置换不变性及 \eqref{hm:moments} 给出
-$\mathbb E c_I^2\le C\binom{k_s}{q_s}^{-1}\le Ck_s^{-q_s}$。
-每个 $c_I$ 是次数不超过 $D_s=m+\cdots+m^{L-s}$ 的高斯多项式，故高斯多项式超收缩不等式
-$\|c_I\|_u\le(u-1)^{D_s/2}\|c_I\|_2$（$u\ge2$）给出：取 $u=A\log d$，在 $e\|c_I\|_u$ 处应用 Markov，再对至多 $k_s^{q_s}$ 项作并集界，可令任意预定 $M$ 下
+平方自由单项式中每个变量次数至多为一，记 $\mathrm{SF}$ 为其正交投影。
+对 $|I|=q_s$，写 $Y_I$ 的系数为 $p_I$，令 $c_I=p_I/\sqrt{q_s!}$，则
+$\sum_Ic_I^2=\|\mathrm{SF}C_s\|^2$，且 $c_I$ 是对应互异张量坐标的 $\sqrt{q_s!}$ 倍。
+式~\eqref{fp:core-coordinate-bounds}及其证明给任意固定 $M$：
 \begin{equation}\label{hm:dense}
- \mathbb P\left\{\max_I|c_I|^2>
- C_M (\log d)^{D_s}k_s^{-q_s}\right\}\le d^{-M}.
+ \mathbb P\left\{\max_I|c_I|^2>C_M(\log d)^{D_s}k_s^{-q_s}\right\}\le d^{-M},
+ \qquad D_s=m+\cdots+m^{L-s},\quad s<L.
 \end{equation}
-终层为确定向量，单独处理。
-
-下面证明下游系数张量中含重复指标的部分范数为 $o(1)$。令 $T=\operatorname{Sym}_{mr}U_A^{\otimes r}B$，$\|A\|_{\rm op}\le K$，$\max_{ij}|a_{ij}|\le\kappa$。将 $T$ 的两个指定输入槽与 $e_j$ 收缩：若两个槽来自同一个 $m$ 块，所得块映射为
-\[
- (A^T)^{\otimes(m-2)}J\operatorname{diag}(a_{ij}^2),
-\]
-其范数至多 $K^{m-2}\kappa^2$；若来自不同块，每块各自范数至多 $K^{m-1}\kappa$。其余块的算子范数有常数上界，固定次数下对称化只有有限种槽分配。因此
-\[
- \|T(e_j,e_j,\cdot,\ldots,\cdot)\|\le C\kappa^2\|B\|.
-\]
-坐标碰撞张量范数平方至多所有坐标对角切片范数平方之和乘以 $\binom{mr}{2}$，所以
+同时，在各层共同的边缘高概率事件上，
 \begin{equation}\label{hm:collision}
- \|(I-\mathrm{SF})T\|^2\le C n\kappa^4\|B\|^2=o(1)\|B\|^2,
- \qquad \kappa=O(\sqrt{\log d/d}),\ n\asymp d.
+ \|(I-\mathrm{SF})C_s\|^2\le L_d/d=o(1)\quad(s<L),
+ \qquad (I-\mathrm{SF})C_L=0.
 \end{equation}
-将此用于 $C_s$ 的第一次下游代入，并用上层张量范数有界，即得
-$\|(I-\mathrm{SF})C_s\|=o(1)$。式~\eqref{hm:mode} 的下界用于完整系数张量的切片，因此后文在应用该下界前先恢复完整张量。
+后文只需该绝对误差；施加有界的完整提升仍为 $o(1)$。
+式~\eqref{hm:mode} 的下界针对完整切片，故应用前须恢复完整张量。
 
 所有这些边缘事件可同时选取，失败概率趋于零。有符号行列置换保持行范数、算子范数、相干度、最大坐标及列平方和；下游系数张量只发生坐标重排和符号变化。因此其范数、最大系数绝对值、式~\eqref{hm:mode} 的切片界，以及重复指标部分的范数界均保持。即使根据两个网络选择对齐，这些确定性界仍成立。
 
@@ -1861,7 +1715,7 @@ $Q_I$ 属于分组空间，$E_I$ 属于实际全局对称空间。平方自由�
 \end{equation}
 两种归一化使不拆分 $m$ 个槽的跨网络配对项完全相同。
 
-\subsection{自适应混合槽比较}
+\subsection{两种张量表示的 Gram 矩阵比较}
 \newthought*{一次 Schur 比较同时处理自身与交叉 Gram。}
 给定两个单位行阵列 $A,B$，自身相干度至多 $\eta_d=O(\sqrt{\log d/d})$，
 算子范数至多 $K$。置 $\rho_{ij}=\langle a_i,b_j\rangle$、$\tau=d^{-1/8}$。
@@ -2009,38 +1863,28 @@ $\|r_ia_i-t_ib_i\|^2\le C\|a_i-b_i\|^2+C\delta_d^2$
 定理 \ref{fp:global-function-pairing} 和正文的极化恒等式将实际函数距离控制转为齐次系数距离控制，再应用定理 \ref{hm:global-matching}。行符号只用于有限标签参数对齐，并不要求保持实际激活的函数值。
 
 \section{条件 I--MMSE 与统一平滑测试场}\label{app:information}
-\begin{lemma}[条件 I--MMSE]\label{info:immse}
-设实随机变量 $S$ 有有限二阶矩，$N\sim N(0,1)$ 独立于 $(S,Z)$。
-对 $Y_s=\sqrt sS+N$，有
-\[
- I(S;Y_\rho\mid Z)=\frac12\int_0^\rho
- \E[(S-\E[S\mid Z,Y_s])^2]\,ds.
-\]
-\end{lemma}
-\begin{proof}
-条件于 $Z=z$，令 $q_v$ 为 $S+\sqrt vN$ 的密度。高斯热方程和分部积分给
+记 $f=F_{\theta(W)}^{(L)}(X)$、$a=\nabla_Wf$、
+$\mathcal I_W=\E_Xaa^T/\Delta$、$Z=(\mathcal D_n,X)$。
+另取独立标准高斯 $N$，令 $U_s=\sqrt sf+N$、
+$m(s)=\E[(f-\E[f\mid Z,U_s])^2]$。真实高斯输出通道及条件 I--MMSE 给
+\begin{equation}\label{eq:conditional-immse}
+ \epsilon_{\log,d,n}=I(f;U_{1/\Delta}\mid Z)
+ =\frac12\int_0^{1/\Delta}m(s)\,ds.
+\end{equation}
+为验证第二等号，条件于 $Z=z$，令 $q_v$ 为 $f+\sqrt vN$ 的密度。
+高斯热方程、分部积分及条件期望公式给
 \[
  \frac d{dv}h(q_v)=\frac12\mathcal J(q_v),\qquad
- \partial_y\log q_v(y)=\frac{\E[S\mid z,S+\sqrt vN=y]-y}{v}.
+ \partial_y\log q_v(y)=\frac{\E[f\mid z,f+\sqrt vN=y]-y}{v}.
 \]
-将 $S-(S+\sqrt vN)$ 对观察作正交分解，得到
-$\operatorname{mmse}(S\mid z,S+\sqrt vN)=v-v^2\mathcal J(q_v)$。
-从熵中减去噪声熵 $\tfrac12\log(2\pi ev)$ 后微分，再换元 $v=1/s$，
-互信息导数即为 MMSE 的一半。有界信号先在有界空间积分，再去掉空间截断；
-一般信号以二阶矩截断逼近。由 $\mathcal J(q_v)\le1/v$ 及截断二阶矩的一致可积性，
-每个紧区间 $0<s_0\le s\le s_1$ 上的积分恒等式通过极限。
-最后用 $I(S;Y_s\mid Z)\le s\E S^2/2$、$\operatorname{mmse}\le\E S^2$，
-平均 $z$ 并令 $s_0\downarrow0$。
-\end{proof}
+正交分解得到 $\operatorname{mmse}(f\mid z,f+\sqrt vN)=v-v^2\mathcal J(q_v)$。
+从 $h(q_v)$ 减去噪声熵后微分，再令 $v=1/s$，互信息导数即为 MMSE 的一半。
+上述计算先对截断信号及有界空间成立；由 $\mathcal J(q_v)\le1/v$
+和信号二阶矩的一致可积性，可在任意 $0<s_0\le s\le s_1$ 上去掉截断。
+最后用 $I(f;U_s\mid Z)\le s\E f^2/2$、$m(s)\le\E f^2$，
+平均 $z$ 并令 $s_0\downarrow0$，即得 \eqref{eq:conditional-immse}。
 
 \subsection{真实通道的分部积分界}
-记 $f=F_{\theta(W)}^{(L)}(X)$、$a=\nabla_Wf$、
-$\mathcal I_W=\E_Xaa^T/\Delta$、$Z=(\mathcal D_n,X)$，
-$U_s=\sqrt sf+N$，其中 $N$ 独立标准高斯。上引理给
-\begin{equation}\label{eq:conditional-immse}
- \epsilon_{\log,d,n}=\frac12\int_0^{1/\Delta}m(s)\,ds,
- \qquad m(s)=\E(f-\E[f\mid Z,U_s])^2.
-\end{equation}
 对只依赖 $(W,X)$ 的向量场 $b$，令
 \[
  G_s=\delta b+b^TS_D+\sqrt sN b^Ta,\qquad

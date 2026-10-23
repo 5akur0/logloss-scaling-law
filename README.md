@@ -3,7 +3,7 @@
 A self-contained proof of the fixed-depth excess log-loss (predictive KL) scaling law for
 Bayes-optimal learning in deep teacher–student networks.
 
-**Current proof (Chinese, 29 pages, 2026-10-24):** [`scaling-proof-zh.pdf`](scaling-proof-zh.pdf) · [`scaling-proof-zh.tex`](scaling-proof-zh.tex)
+**Current proof (Chinese, 27 pages, 2026-10-24):** [`scaling-proof-zh.pdf`](scaling-proof-zh.pdf) · [`scaling-proof-zh.tex`](scaling-proof-zh.tex)
 
 **Earlier English edition (v1.1):** [`scaling-proof.pdf`](scaling-proof.pdf) · [`scaling-proof.tex`](scaling-proof.tex)
 
@@ -52,6 +52,8 @@ pdflatex scaling-proof.tex
 ```
 
 ## Changelog
+
+- **2026-10-24 seventh working revision (Chinese)** — 29 to 27 pages: one conditional-entropy estimate handles both parameter information and auxiliary-observation cost; one relative-entropy identity controls cumulative and incremental information. Share coefficient moment, coordinate and repeated-index estimates across the geometric proofs. Obtain the polynomial correction formula directly by cancelling its deterministic quadratic diagonal. Remove duplicated model definitions and proof summaries; shorten moment and Hessian estimates while retaining all boundary cases.
 
 - **2026-10-24 sixth working revision (Chinese)** — Describe geometric contraction steps using parent indices, remaining factors and stopping positions. Remove metaphorical descriptions while preserving the original hypotheses, displays and labels.
 

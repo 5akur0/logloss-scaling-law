@@ -3,7 +3,7 @@
 A self-contained proof of the fixed-depth excess log-loss (predictive KL) scaling law for
 Bayes-optimal learning in deep teacher–student networks.
 
-**Current proof (Chinese, 34 pages, 2026-10-24):** [`scaling-proof-zh.pdf`](scaling-proof-zh.pdf) · [`scaling-proof-zh.tex`](scaling-proof-zh.tex)
+**Current proof (Chinese, 31 pages, 2026-10-24):** [`scaling-proof-zh.pdf`](scaling-proof-zh.pdf) · [`scaling-proof-zh.tex`](scaling-proof-zh.tex)
 
 **Earlier English edition (v1.1):** [`scaling-proof.pdf`](scaling-proof.pdf) · [`scaling-proof.tex`](scaling-proof.tex)
 
@@ -21,7 +21,7 @@ $$
 
 with the width limit taken first, i.e. $\epsilon_{\log}(\alpha)\simeq P_{\mathrm{hidden}}/(2n)$. The activation class covers centered normalized
 `tanh`, the logistic sigmoid and ReLU (an odd smooth branch and a piecewise-linear branch,
-with the precise scalar Hermite and regularity conditions stated in the current proof). Unlike the replica-symmetric
+with the precise regularity conditions stated in the current proof). Unlike the replica-symmetric
 treatment of $L\ge2$, no vanishing of the linear Hermite coefficient is required.
 
 The proof assumes neither a replica-symmetric free-entropy formula, nor existence of the
@@ -34,7 +34,7 @@ risk limit at fixed $\alpha$, nor local Gaussianity of the posterior.
 - Conditional I–MMSE and Gaussian integration by parts give the predictive lower bound with its exact factor 1/2.
 - Consistent linear Gaussian reference distributions, relative-entropy monotonicity, and a sample-block information identity give the sharp upper bound.
 - Direct OU gradient estimates and parameter-semigroup smoothing cover the piecewise-linear branch. Unified residual-tensor bounds handle the geometric contractions.
-- All supporting estimates remain in the standalone document. The theorem, activation class and dimension-first limit are unchanged from the preceding Chinese working version.
+- All supporting estimates remain in the standalone document. The scaling theorem and dimension-first limit are unchanged; the redundant radial Hermite-derivative condition has been removed without excluding any previously covered activation.
 
 ## Build
 
@@ -52,6 +52,8 @@ pdflatex scaling-proof.tex
 ```
 
 ## Changelog
+
+- **2026-10-24 second working revision (Chinese)** — 34 to 31 pages: unify the two predictive lower bounds with a parameter-OU test field; recover row matching and tensor coefficients from one square-difference identity; shorten the actual-activation recursion and remove unused tensor estimates. Bounded normalized odd activations automatically have a nonzero high-order Hermite coefficient, so the redundant radial-derivative condition and long tanh verification are removed.
 
 - **2026-10-24 working revision (Chinese)** — 37 to 34 pages: replace the ridge upper-bound construction by a consistent Gaussian-reference argument; replace activation smoothing by parameter OU smoothing; consolidate residual-tensor contractions and remove redundant terminal sign constraints. The theorem and activation class are unchanged.
 

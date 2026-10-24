@@ -5,7 +5,7 @@ Bayes-optimal learning in deep teacher–student networks.
 
 **Current proof (Chinese, 20 pages, 2026-10-24):** [`scaling-proof-zh.pdf`](scaling-proof-zh.pdf) · [`scaling-proof-zh.tex`](scaling-proof-zh.tex)
 
-**Earlier English edition (v1.1):** [`scaling-proof.pdf`](scaling-proof.pdf) · [`scaling-proof.tex`](scaling-proof.tex)
+**Current proof (English, 25 pages, 2026-10-24):** [`scaling-proof.pdf`](scaling-proof.pdf) · [`scaling-proof.tex`](scaling-proof.tex)
 
 ## Result
 
@@ -38,20 +38,23 @@ risk limit at fixed $\alpha$, nor local Gaussianity of the posterior.
 
 ## Build
 
-Current Chinese edition (Tufte class, Fandol fonts):
+Both editions are standalone Tufte documents, built with Tectonic (or XeLaTeX). The Chinese edition uses Fandol fonts.
+
+Chinese:
 
 ```
 tectonic scaling-proof-zh.tex
 ```
 
-Earlier English edition:
+English:
 
 ```
-pdflatex scaling-proof.tex
-pdflatex scaling-proof.tex
+tectonic scaling-proof.tex
 ```
 
 ## Changelog
+
+- **2026-10-24 bilingual synchronization** — Replace the earlier English proof with a complete translation of the current Chinese proof. Both editions now use the same assumptions, theorem statements, mathematical formulas, labels, numbering, and proof dependencies, including triangular restoration with bounded shallow corrections. The English PDF is 25 pages and the Chinese PDF is 20 pages. Future mathematical revisions apply to both editions together.
 
 - **2026-10-24 twelfth working revision (Chinese)** — Replace the explicit shallow-correction polynomial and coefficient cancellation with a triangular restoration argument and finitely many shallow root polynomials with uniformly bounded coefficients. Retain the error estimates and dynamic quadratic-diagonal reduction. The theorem and activation class are unchanged; the independently reviewed standalone PDF remains 20 pages, with 131 displayed formula blocks.
 

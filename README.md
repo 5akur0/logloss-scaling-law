@@ -53,6 +53,8 @@ pdflatex scaling-proof.tex
 
 ## Changelog
 
+- **2026-10-24 eleventh working revision (Chinese)** — Shorten prose by 1,052 Chinese characters (8.3%), removing repeated explanations and replacing indirect wording with explicit statements. All 132 displayed formula blocks, theorem hypotheses and typography are retained; the standalone PDF remains 20 pages.
+
 - **2026-10-24 tenth working revision (Chinese)** — 26 to 20 pages with unchanged typography and theorem. A common coordinate-moment argument replaces Hessian and negative-moment estimates; dimension-first limits allow the weaker positive perturbation exponent. Combine activation projection and repeated-index restoration into one recurrence, use one ordered-tree induction, and organize homogeneous matching as a single-layer estimate followed by depth induction. Merge repeated information estimates while retaining their derivations.
 
 - **2026-10-24 ninth working revision (Chinese)** — 27 to 26 pages: reuse the main OU estimates in their appendix proof, remove repeated matching bounds and definitions, and streamline the Sobolev approximation argument. All hypotheses, error rates and proof steps are retained.

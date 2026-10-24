@@ -53,6 +53,8 @@ pdflatex scaling-proof.tex
 
 ## Changelog
 
+- **2026-10-24 twelfth working revision (Chinese)** — Replace the explicit shallow-correction polynomial and coefficient cancellation with a triangular restoration argument and finitely many shallow root polynomials with uniformly bounded coefficients. Retain the error estimates and dynamic quadratic-diagonal reduction. The theorem and activation class are unchanged; the independently reviewed standalone PDF remains 20 pages, with 131 displayed formula blocks.
+
 - **2026-10-24 English errata** — Use the defined ridge matrix `R` consistently in Section 7, correct the explanation of the sixth Hermite coefficient, and specialize Appendix A.6 to the Gaussian channel used in this paper. Regenerate the English PDF; the current Chinese edition is unchanged.
 
 - **2026-10-24 eleventh working revision (Chinese)** — Shorten prose by 1,052 Chinese characters (8.3%), removing repeated explanations and replacing indirect wording with explicit statements. All 132 displayed formula blocks, theorem hypotheses and typography are retained; the standalone PDF remains 20 pages.

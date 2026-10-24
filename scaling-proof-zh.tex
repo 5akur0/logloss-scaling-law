@@ -1092,34 +1092,34 @@ $j=t$ 时 $\tr H_t=\|C_t\|_F^2/\sqrt{k_t}$，均值为 $\sqrt{k_t}$，且方差�
 乘回标量证明\eqref{fp:actual-diag}，亦适用于辅助变量取系数。
 
 \begin{lemma}[去掉索引互异限制]\label{fp:actual-restoration}
-对固定零常数多项式 $A,p_1,\ldots,p_{t-1}$，$t\ge2$，以 $[p]_r$ 表示 $z^r$ 系数，有
+设 $A,p_1,\ldots,p_{t-1}$ 零常数、次数固定且系数一致有界，$t\ge2$。
+以 $[p]_r$ 表示 $z^r$ 系数，则
 \begin{equation}\label{fp:actual-restoration-exact}
- J_{t,N}[A;p]=R_{t,N}[A;p]-[A]_2\sqrt{k_t/k_{t-1}}
- R_{t-1,N}[p_{t-1}^2;p_{<t-1}]+o_{L^2}(1).
+ R_{t,N}[A;p]-J_{t,N}[A;p]
+ =\sum_{s=1}^{t-1}\lambda_sJ_{s,N}[p_s^2;p_{<s}]+o_{L^2}(1),
+ \qquad
+ \lambda_s=[A]_2\prod_{j=s+1}^{t-1}[p_j]_1^2\sqrt{k_t/k_s}.
 \end{equation}
 \end{lemma}
 \begin{proof}
-令 $\gamma=[A]_2\sqrt{k_t/k_{t-1}}$。在取形式系数前，从完整网络减去
-$\gamma k_{t-1}^{-1/2}\sum_i y_i y_i$，其中 $y$ 为第 $t-1$ 层输出；
-两个因子虽数值相等，仍各保留父索引，占两个槽。
-由下向上依次施加第 $s=1,\ldots,t-1$ 层的互异限制。
-此时上方仍是完整多项式。$s<t-1$ 时可将减项的上部识别为根激活
-$p_{t-1}^2$ 的浅网络；两项的确定二次对角标量分别为
-\[
- [A]_2\prod_{j=s+1}^{t-1}[p_j]_1^2\sqrt{k_t/k_s}
- =\gamma[p_{t-1}^2]_2\prod_{j=s+1}^{t-2}[p_j]_1^2\sqrt{k_{t-1}/k_s},
-\]
-其中用了 $[p^2]_2=[p]_1^2$。$s=t-1$ 时减项就是原上部系数的确定二次对角。
-两项在代入共同下层之前相消；二次余项由\eqref{fp:actual-diag}、更高次重复坐标
-由原始碰撞估计给 $o_{L^2}(1)$，一次没有重复坐标。
-共同下层映射由固定多个原展开映射、坐标投影和对称化组成，范数由
-有限个 $\|A_j\|_{\rm op}$ 的固定次幂控制；全局坐标限制为收缩，无须逐槽分解。
-固定次数高斯多项式的矩等价使系数误差为 $L^4$ 小量，
-H\"older 与\eqref{fp:actual-isometry} 遂给每步函数误差 $o_{L^2}(1)$，不需独立性。
-第 $t-1$ 层限制删掉减项的两个相等父标签，原项成为 $J$，得证。
+从完整展开出发，依次施加第 $s=1,\ldots,t-1$ 层的互异限制。
+处理第 $s$ 层时，上部仍是完整多项式。
+式~\eqref{fp:actual-diag} 将其二次对角写成 $\lambda_sI/\sqrt{k_s}$ 加
+Hilbert--Schmidt 小误差。记第 $s$ 层多项式输出为 $h_s$；主项识别两个父标签，得到
+$\lambda_sk_s^{-1/2}\sum_i h_{s,i}^2$；下方已有的互异限制使其恰为
+$\lambda_sJ_{s,N}[p_s^2;p_{<s}]$，两个相等因子仍各占一个原槽。
+一次没有重复坐标，更高次重复由原始碰撞估计控制。
+上述误差均通过共同下层的原展开、坐标投影和对称化传递，其算子范数由
+有限个 $\|A_j\|_{\rm op}$ 的固定次幂控制。
+固定次数高斯多项式的矩等价将系数误差提升为 $L^4$ 小量，
+H\"older 与\eqref{fp:actual-isometry} 给每步函数误差 $o_{L^2}(1)$。
+对有限个接口求和即得结论，不需上下层误差独立。
 \end{proof}
+右侧各 $J$ 的高度严格小于 $t$，从 $J_{1,N}=R_{1,N}$ 强归纳，
+便将 $J_{t,N}[A;p]$ 写成 $R_{t,N}[A;p]$ 加有限个更浅的裸网络。
+各浅根仍零常数、系数一致有界；超过 $N$ 次的项不贡献形式 $N$ 次系数，可删去。
 
-\subsection{条件均值递推与全部浅层修正}
+\subsection{条件均值递推与浅层修正}
 \label{fp:actual-mean}\label{fp:actual-masked-formula}
 分段线性支对 $f=\sigma,\chi$ 有精确公式
 \begin{equation}\label{fp:actual-root-mean}
@@ -1131,31 +1131,25 @@ H\"older 与\eqref{fp:actual-isometry} 遂给每步函数误差 $o_{L^2}(1)$，�
 二次余项仍为 $O_{L^2}(d^{-1/2})$。$t\ge2$ 时线性项等于
 $\lambda_f\sqrt{k_t/k_{t-1}}F_{t-1}^\chi$；$t=1$ 时为
 $\lambda_f\sqrt{k_1}(q_0-1)$，被 $N>2$ 投影精确消去。
-高斯密度按方差求导还给
-$[H_f]_2=\frac12\E[f(G)(G^2-1)]=\lambda_f$。
-结合\eqref{fp:actual-positive-local} 与引理~\ref{fp:actual-restoration} 得
+结合\eqref{fp:actual-positive-local} 得
 \begin{equation}\label{fp:actual-cancel-recursion}
- \Pi_NF_t^f=R_{t,N}[H_f;P_N]+\lambda_f\sqrt{k_t/k_{t-1}}
- \bigl(\Pi_NF_{t-1}^\chi-R_{t-1,N}[P_N^2;P_N]\bigr)+o_{L^2}(1),
+ \Pi_NF_t^f=J_{t,N}[H_f;P_N]
+ +\lambda_f\sqrt{k_t/k_{t-1}}\Pi_NF_{t-1}^\chi+o_{L^2}(1),
  \quad t\ge2,
 \end{equation}
 初值为 $\Pi_NF_1^f=R_{1,N}[H_f]+o_{L^2}(1)$。
-置 $U_N=[Q_N-P_N^2]_{\deg\le N}$、
-$E_t=\Pi_NF_t^\chi-R_{t,N}[P_N^2;P_N]$，则
-$E_1=R_{1,N}[U_N]+o_{L^2}(1)$ 且
-$E_t=R_{t,N}[U_N;P_N]+\sqrt{k_t/k_{t-1}}E_{t-1}+o_{L^2}(1)$。
-固定深度归纳及 $f=\sigma$ 的递推给出
+代入引理~\ref{fp:actual-restoration} 的浅层表示，对高度归纳并合并同高根多项式，得到
 \begin{equation}\label{fp:actual-U}
  \mathcal Q_N=R_{L,N}[P_N;P_N]
- +\mu'\sum_{t=1}^{L-1}\sqrt{k_L/k_t}\,R_{t,N}[U_N;P_N],
- \qquad \mu'=bu/2,
+ +\sum_{s=1}^{L-1}R_{s,N}[A_{s,d};P_N],
 \end{equation}
 \begin{equation}\label{fp:actual-final}
  \boxed{\E_W\|\Pi_NF_L-\mathcal Q_N\|_{L^2_X}^2\longrightarrow0,\qquad N>2.}
 \end{equation}
-奇支的条件均值及二次系数均为零，同一证明给出 $\mu'=0$，无需 $\chi$。
-所有多项式零常数，逐层代入不降低形式次数，故超过 $N$ 次的项均可删去。
-以下同时比较深层项与式~\eqref{fp:actual-U} 的全部浅层修正；单网络 $L^2$ 误差由
+这里 $A_{s,d}$ 是零常数、次数至多 $N$ 的确定性多项式，系数由固定激活系数和
+有限个宽度比构成，故一致有界。奇支的条件均值及二次系数均为零，
+可取所有 $A_{s,d}=0$，无需 $\chi$；$L=1$ 时求和为空。
+以下比较对次数固定、系数有界的任意浅根一致成立，故无需计算 $A_{s,d}$ 的具体系数；单网络 $L^2$ 误差由
 Cauchy--Schwarz 转移到任意先验边缘耦合。
 
 

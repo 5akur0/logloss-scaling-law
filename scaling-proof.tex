@@ -29,7 +29,7 @@
 \title{Excess Log-Loss Scaling of Centered Normalized Networks\\[4pt]
 \large A fixed-depth theorem in the dimension-first limit}
 \author{}
-\date{October 14, 2026 \quad (revised October 16, 2026)}
+\date{October 14, 2026 \quad (revised October 24, 2026)}
 \hypersetup{pdftitle={Excess Log-Loss Scaling of Centered Normalized Networks}}
 \begin{document}
 \maketitle
@@ -176,7 +176,7 @@ $a=b=1/(2\sqrt{v_R})$. More generally, for \eqref{eq:pl} direct integration give
 In particular $\mu_6(1)\neq0$.
 For instance, using $\operatorname{He}_6(z)=z^6-15z^4+45z^2-15$ and
 $\E|G|^{2j+1}=2^jj!\sqrt{2/\pi}$, one gets
-$\E[|G|\operatorname{He}_6(G)]=6\varphi(0)$; then divide by $6!$.
+$\E[|G|\operatorname{He}_6(G)]=6\varphi(0)$; multiplying by $bs$ gives $\mu_6(s)$.
 All odd coefficients of degree $j\ge3$ vanish, so the degree-five and degree-seven neighbours of degree six vanish. For the smooth odd branch all even coefficients vanish at every scale.
 
 Convolve $|z|$ with an even smooth kernel, then center and normalize under the Gaussian measure to obtain $\sigma_{\dsm}$. The derivative error is concentrated on $|z|\lesssim\dsm$; normalization adds a slope error $O(\dsm)$. Hence, on compact sets of scales,
@@ -470,7 +470,7 @@ F_{\theta(\widetilde W)}^{(L)}(x)\right|_{\widetilde W=A}.
 \]
 In the experiment where $V_t$ is known, use the population ridge tangent predictor
 \begin{equation}\label{eq:estimator}
-\widehat f_j(x)=F_{\theta_t}^{(L)}(x)+a(x)^TK^{-1}
+\widehat f_j(x)=F_{\theta_t}^{(L)}(x)+a(x)^TR^{-1}
 \frac1j\sum_{i=1}^j a(X_i)(Y_i-F_{\theta_t}^{(L)}(X_i)).
 \end{equation}
 This predictor depends only on the known $V_t$, the training data and the input law. It only needs to be a valid predictor (the population matrix need not be computed); its risk bounds the Bayes risk.
@@ -479,20 +479,20 @@ This predictor depends only on the known $V_t$, the training data and the input 
 \paragraph{Conditionally on $(W,V_t)$ the samples remain independent.}
 Write $g=F_\theta^{(L)}-F_{\theta_t}^{(L)}$, $h=\E_X[a(X)g(X)]$ and let
 \[
-(Pg)(x)=a(x)^TK^{-1}h,\qquad
-\ell_z(x)=a(x)^TK^{-1}AK^{-1}a(x).
+(Pg)(x)=a(x)^TR^{-1}h,\qquad
+\ell_z(x)=a(x)^TR^{-1}AR^{-1}a(x).
 \]
 Computing the covariance of the sample mean and averaging over an independent test input gives
 \begin{equation}\label{eq:ridge-exact}\begin{aligned}
 \E[\norm{\widehat f_j-F_\theta^{(L)}}_{L_X^2}^2\mid W,V_t]
 ={}&\norm{(I-P)g}_{L_X^2}^2
-+\frac\Delta j\tr[(AK^{-1})^2]\\
++\frac\Delta j\tr[(AR^{-1})^2]\\
 &+\frac1j\{\E_X[\ell_z(X)g(X)^2]
--h^TK^{-1}AK^{-1}h\}.
+-h^TR^{-1}AR^{-1}h\}.
 \end{aligned}\end{equation}
 The negative part of the last term may be dropped. Each eigenvalue in the noise trace is $(s/(s+\varsigma))^2\le1$, so
 \[
-\frac\Delta j\tr[(AK^{-1})^2]\le\frac{\Delta p}{j}.
+\frac\Delta j\tr[(AR^{-1})^2]\le\frac{\Delta p}{j}.
 \]
 For a Gaussian plug-in predictor the KL equals the mean squared error divided by $2\Delta$. The Bayes predictive minimizes the average log-loss, so the noise contributes with coefficient $p/(2j)$, not merely $Cp/j$ with an unknown constant.
 
@@ -931,15 +931,14 @@ First take compactly supported smooth fields. Integrating by parts twice coordin
 $\partial_i(W_jg_j)=\boldsymbol1_{i=j}g_j+W_j\partial_i g_j$, the cross terms combine into the identity; $2uv\le u^2+v^2$ applied to each term of the derivative sum gives the inequality. In general, first apply a radial cutoff $\chi_R$ with $0\le\chi_R\le1$, equal to one on the ball, $\|\nabla\chi_R\|_\infty\le C/R$, then convolve on compact sets. The Gaussian density is smooth with positive upper and lower bounds on compact sets, so ordinary convolution approximation also gives Gaussian $W^{1,2}$ approximation. Tails are controlled by square integrability of $g,Dg$, and the cutoff derivative term by $C\|g\|/R$. Hence compactly supported smooth fields converge in this Sobolev norm; the inequality makes their divergences Cauchy in $L^2$, with limit the distributional divergence. The identity passes to the limit. External variables are handled by approximating with simple functions and integrating.
 \end{proof}
 
-For the regularized test field let $f$ be the true output, $a=\nabla f$ the true gradient and $a_{\dsm}$ the auxiliary smoothed gradient; in the smooth case take $a_{\dsm}=a$. Let $j(f)$ be the channel Fisher weight, $\mathcal I_{\dsm}=\mathbb E_X[j(f)a_{\dsm} a_{\dsm}^T]$, $M_{\dsm}=(\mathcal I_{\dsm}+\lambda I)^{-1}$, with $\lambda>0$ fixed in this paragraph. At each fixed dimension and fixed $\dsm>0$, local Lipschitz continuity of the network, the moment bounds above and the weak product rule allow differentiating $\mathcal I_{\dsm}$ and exchanging the derivative with the $X$ integral; the derivative contains the $j'(f)a$ term, which cannot be omitted. The weak chain rule for the inverse is
+For the regularized test field let $f$ be the true output, $a=\nabla f$ the true gradient and $a_{\dsm}$ the auxiliary smoothed gradient; in the smooth case take $a_{\dsm}=a$. For the Gaussian channel the Fisher weight is the constant $1/\Delta$. Set $\mathcal I_{\dsm}=\Delta^{-1}\mathbb E_X[a_{\dsm} a_{\dsm}^T]$ and $M_{\dsm}=(\mathcal I_{\dsm}+\lambda I)^{-1}$, with $\lambda>0$ fixed in this paragraph. At each fixed dimension and fixed $\dsm>0$, the moment bounds above and the weak product rule allow differentiating $\mathcal I_{\dsm}$ and exchanging the derivative with the $X$ integral. The weak chain rule for the inverse is
 \[
  \partial_iM_{\dsm}=-M_{\dsm}(\partial_i\mathcal I_{\dsm})M_{\dsm}.
 \]
-Under the channel bounds $j\le J_0$, $j'^2/j\le L_0$ of the main text,
+Since the Fisher weight is constant,
 \[
- \|D(\sqrt{j(f)}a_{\dsm})\|_{\rm HS}^2
- \le2J_0\|\nabla^2f_{\dsm}\|_{\rm HS}^2
-       +\tfrac12L_0\|a\|^2\|a_{\dsm}\|^2,
+ \|D(\Delta^{-1/2}a_{\dsm})\|_{\rm HS}^2
+ =\Delta^{-1}\|\nabla^2f_{\dsm}\|_{\rm HS}^2,
 \]
 and the right side is integrable by this section. The local exchange is justified by truncating to compact sets in $W$ and dominating with fixed input moments; no pointwise global bound on the Hessian in $W$ is needed.
 
@@ -958,7 +957,7 @@ $N_0=\int(1-t)\mathbb E\int\|g_t\|^2<\infty$ and
 $N_1=\int(1-t)\mathbb E\int\|Dg_t\|_{\rm HS}^2<\infty$,
 Lemma~\ref{an:sobolev} applies directly in the $L^2$ space of the external variables $(X,y,t)$.
 
-Finally use $b_{t,R}=\chi_R b_t$ for the original field. For fixed $0<t<1$, positivity of the mixture density and the product rule for the smooth channel on compact sets make it a local Sobolev field; the true piecewise-linear $f$ is continuous and locally Lipschitz, and the field uses $a_{\dsm}$ to avoid differentiating discontinuous gates. For compactly supported fields integrate by parts against the joint density first. Removing the cutoff produces the error $\nabla\chi_R\cdot b_t$, whose integrated squared norm under the joint mixture measure is at most $C N_0/R^2$ and hence vanishes. The auxiliary divergence term is dominated by \eqref{an:divergence} and $N_0+N_1$; the training-score term by conditional centering and the finite Fisher quadratic form of the main text. The target side and the estimation-error side are dominated by the finite trace bound and the finite squared-error bound, so Cauchy--Schwarz gives the limit. Alternatively restrict to $t\in[\eta,1-\eta]$ first and then let $\eta\downarrow0$; the weighted integral bounds above are exactly the dominating functions for removing the endpoint cutoff. For Gaussian regression and binary channels the fixed-dimensional likelihood is bounded, so Fubini is valid in the compactly supported step.
+Finally use $b_{t,R}=\chi_R b_t$ for the original field. For fixed $0<t<1$, positivity of the mixture density and the product rule for the smooth channel on compact sets make it a local Sobolev field; the true piecewise-linear $f$ is continuous and locally Lipschitz, and the field uses $a_{\dsm}$ to avoid differentiating discontinuous gates. For compactly supported fields integrate by parts against the joint density first. Removing the cutoff produces the error $\nabla\chi_R\cdot b_t$, whose integrated squared norm under the joint mixture measure is at most $C N_0/R^2$ and hence vanishes. The auxiliary divergence term is dominated by \eqref{an:divergence} and $N_0+N_1$; the training-score term by conditional centering and the finite Fisher quadratic form of the main text. The target side and the estimation-error side are dominated by the finite trace bound and the finite squared-error bound, so Cauchy--Schwarz gives the limit. Alternatively restrict to $t\in[\eta,1-\eta]$ first and then let $\eta\downarrow0$; the weighted integral bounds above are exactly the dominating functions for removing the endpoint cutoff. For Gaussian regression the fixed-dimensional likelihood is bounded, so Fubini is valid in the compactly supported step.
 
 All of the above concern the Gaussian prior and independent Gaussian inputs; the OU remainder requires the specified independent Gaussian coupling and does not apply to arbitrary posterior replica pairs.
 
